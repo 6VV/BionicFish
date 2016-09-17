@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.MainActivity">
+
+    <Button
+        android:id="@+id/viewLocation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="100dp"
+        android:scaleType="fitCenter"
+        android:visibility="invisible"/>
+
+    <ImageButton
+        android:id="@+id/btnFishUp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="85dp"
+        android:layout_above="@+id/viewLocation"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fish_up"
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:id="@+id/btnFishLeft"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/viewLocation"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="40dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fish_left"
+        android:background="@android:color/transparent"/>
+
+    <ImageButton
+        android:id="@+id/btnFishRight"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/viewLocation"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="130dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fish_right"
+        android:background="@android:color/transparent"/>
+
+    <com.lyyjy.yfyb.bionicfish.Speed.SpeedView
+        android:id="@+id/viewFishSpeed"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginRight="50dp"
+        android:scaleType="fitCenter"
+        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/fish_speed" />
+
+    <ImageButton
+        android:id="@+id/btnFishAccelerate"
+        android:layout_width="80dp"
+        android:layout_height="62dp"
+        android:layout_marginRight="50dp"
+        android:layout_above="@+id/viewFishSpeed"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/fish_accelerate" />
+
+    <ImageButton
+        android:layout_width="80dp"
+        android:layout_height="62dp"
+        android:layout_marginRight="50dp"
+        android:layout_below="@+id/viewFishSpeed"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:scaleType="centerInside"
+        android:src="@drawable/fish_decelerate"
+        android:id="@+id/btnFishDecelerate"/>
+
+</RelativeLayout>

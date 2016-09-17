@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ProgramActivity">
+    <item android:id="@+id/action_save"
+        app:showAsAction="never"
+        android:title="保存"
+        tools:ignore="AppCompatResource"></item>
+    <item android:id="@+id/action_load"
+        app:showAsAction="never"
+        android:title="加载"
+        tools:ignore="AppCompatResource"></item>
+    <item android:id="@+id/action_remove"
+        app:showAsAction="never"
+        android:title="删除"
+        tools:ignore="AppCompatResource"></item>
+    <item android:id="@+id/action_format"
+        app:showAsAction="never"
+        android:title="格式化"
+        tools:ignore="AppCompatResource"></item>
+</menu>
