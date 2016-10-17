@@ -11,19 +11,20 @@
     <item android:id="@+id/action_remote"
         android:title="蓝牙状态"
         app:showAsAction="always"
+          android:visible="false"
         android:icon="@mipmap/bluetooth_disabled"></item>
     <item android:id="@+id/action_connect"
         android:title="连接状态"
         app:showAsAction="always"
         android:icon="@mipmap/disconnected"></item>
+    <item android:id="@+id/action_sensor"
+          android:title="重力感应"
+          app:showAsAction="always"
+          android:icon="@mipmap/manual"></item>
     <item android:id="@+id/action_search"
         android:title="查询"
         app:showAsAction="always"
         android:icon="@mipmap/search"></item>
-    <item android:id="@+id/action_sensor"
-        android:title="重力感应"
-        app:showAsAction="always"
-        android:icon="@mipmap/manual"></item>
     <item android:id="@+id/action_select_light"
         android:title="选择灯光"
         app:showAsAction="always"
@@ -36,7 +37,8 @@
     <item android:id="@+id/action_changeName"
         android:title="修改名字"></item>
     <item android:id="@+id/action_pragram"
-        android:title="编程"></item>
+        android:title="编程"
+        android:visible="false"></item>
     <item android:id="@+id/action_setting"
         android:title="设置"
         app:showAsAction="never"
@@ -45,5 +47,5 @@
         android:title="帮助"
         app:showAsAction="ifRoom"
         android:icon="@mipmap/help"
-        android:visible="true"></item>
+        ></item>
 </menu>

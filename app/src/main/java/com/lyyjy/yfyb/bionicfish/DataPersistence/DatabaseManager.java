@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class DatabaseManager extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "BluetoothDevice";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private final String SETTINGS_TABLE_NAME="SettingsTable";
     private final String SETTINGS_COLUMN_NAME="SettingName";

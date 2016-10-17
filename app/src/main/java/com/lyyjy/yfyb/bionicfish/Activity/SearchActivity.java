@@ -188,6 +188,11 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
             @Override
             public void run() {
                 String strName = device.getName();
+
+                if(strName==null || strName.length()==0){
+                    return;
+                }
+
                 byte[] byteName = strName.getBytes();
 
                 if(byteName.length<2){

@@ -219,28 +219,6 @@ public class RemoteBluetooth extends RemoteParent {
         }
         mIRemoteCallback.onReceiveData(data);
 
-//        switch (data[0]){
-//            case CommandManager.BACK_SUCCESS:
-//            {
-//                if (data.length<2){
-//                    return;
-//                }
-//                if (data[1]==CommandManager.BACK_RESET_NAME){
-//                    mIRemoteCallback.onReceiveData(data);
-//                }
-//            }break;
-//            case CommandManager.BACK_HEART_HIT:{
-//                if (data.length<6){
-//                    return;
-//                }
-//                int power=0x000000ff & data[5];
-//                mIRemoteCallback.onElectricQuantityChanged(power);
-//
-//                mHeartbeatListener.beat();
-//            }break;
-//            case CommandManager.BACK_PROGRAM:{
-//            }break;
-//        }
     }
 
     private class HeartbeatListener {

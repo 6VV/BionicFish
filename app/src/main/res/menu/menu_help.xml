@@ -2,15 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_quick_tour"
+        android:title="快速导航"
+        app:showAsAction="always"></item>
+    <item
         android:id="@+id/action_operating_instruction"
         android:title="操作说明"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_matters"
+        android:id="@+id/action_safety_instruction"
         android:title="注意事项"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_specification"
+        android:id="@+id/action_product_specification"
         android:title="参数规格"
         app:showAsAction="always" />
 </menu>
