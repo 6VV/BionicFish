@@ -1,13 +1,18 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,11 +31,11 @@ import com.lyyjy.yfyb.bionicfish.Remote.RemoteParent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends ParentActivity implements IRemoteScan,IRemoteCallback, AdapterView.OnItemClickListener {
-    private MenuItem mMenuItemLoading=null;
-    private MenuItem mMenuItemScanning=null;
+public class SearchActivity extends ParentActivity implements IRemoteScan, IRemoteCallback, AdapterView.OnItemClickListener {
+    private MenuItem mMenuItemLoading = null;
+    private MenuItem mMenuItemScanning = null;
 
-    private BroadcastReceiver mBroadcastReceiver=null;
+    private BroadcastReceiver mBroadcastReceiver = null;
 
     private ListView mListViewDevices;
 
@@ -39,7 +44,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        mListViewDevices=((ListView)findViewById(R.id.lvDevices));
+        mListViewDevices = ((ListView) findViewById(R.id.lvDevices));
         mListViewDevices.setOnItemClickListener(this);
     }
 
@@ -53,38 +58,66 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:{
+        switch (item.getItemId()) {
+            case android.R.id.home: {
                 finish();
-            }break;
-            case R.id.action_search:{
+            }
+            break;
+            case R.id.action_search: {
                 tryToScan(!RemoteFactory.getRemote().isScanning());
-            }break;
-            case R.id.action_refresh:{
+            }
+            break;
+            case R.id.action_refresh: {
                 tryToScan(false);
                 tryToScan(true);
-            }break;
+            }
+            break;
         }
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        updateProgressBarItem();
-        updateScanItem();
+        updateOptionItem();
         return true;
     }
 
-    private final int REQUEST_FINE_LOCATION=1;
+    private void updateOptionItem() {
+        updateProgressBarItem();
+        updateScanItem();
+    }
 
-    private void tryToScan(boolean enable){
+    private final int REQUEST_FINE_LOCATION = 1;
+    private boolean mIsToScan=false;
+
+    private void tryToScan(boolean enable) {
         //清空搜索记录
-        if(enable){
-            mDevicesInfo=new ArrayList<>();
-//            mDevicesInfo.clear();
+        if (enable) {
+            mDevicesInfo = new ArrayList<>();
             updateDeviceList();
         }
-        RemoteFactory.getRemote().tryScanDevice(enable,this,this,REQUEST_FINE_LOCATION);
+
+        if (!RemoteFactory.getRemote().isEnabled()) {
+            return;
+        }
+
+        mIsToScan=enable;
+
+        //若为开始搜索且sdk>=23
+        if (enable && Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                //如果需要向用户解释，为什么要申请该权限
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    Toast.makeText(this, "Android6.0以上版本需要开启定位才能搜索蓝牙设备", Toast.LENGTH_LONG).show();
+                }
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_FINE_LOCATION);
+                return;
+            }
+        }
+
+        RemoteFactory.getRemote().tryScanDevice(enable, this);
+        updateOptionItem();
     }
 
     @Override
@@ -94,30 +127,31 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
             case REQUEST_FINE_LOCATION:
                 // 若申请被取消，则数组为空
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    scan(true);
+                    RemoteFactory.getRemote().tryScanDevice(mIsToScan, this);
+                    updateOptionItem();
                 }
                 break;
         }
     }
 
 
-    private void updateProgressBarItem(){
-        if (mMenuItemLoading!=null){
+    private void updateProgressBarItem() {
+        if (mMenuItemLoading != null) {
             if (RemoteFactory.getRemote().isScanning()) {
                 mMenuItemLoading.setActionView(R.layout.actionbar_search_loading);
                 mMenuItemLoading.setVisible(true);
-            }
-            else {
+            } else {
                 mMenuItemLoading.setVisible(false);
                 mMenuItemLoading.setActionView(null);
             }
         }
     }
-    private void updateScanItem(){
-        if (mMenuItemScanning!=null){
+
+    private void updateScanItem() {
+        if (mMenuItemScanning != null) {
             if (RemoteFactory.getRemote().isScanning()) {
                 mMenuItemScanning.setTitle("停止");
-            }else {
+            } else {
                 mMenuItemScanning.setTitle("搜索");
             }
         }
@@ -132,10 +166,10 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
     protected void onResume() {
         super.onResume();
         RemoteFactory.getRemote().registerRemoteCallback(this);
-        mBroadcastReceiver=RemoteFactory.getRemote().registerEnableReceiver(this,this);
+        mBroadcastReceiver = RemoteFactory.getRemote().registerEnableReceiver(this, this);
 
-        if (!RemoteFactory.getRemote().isEnabled()){
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        if (!RemoteFactory.getRemote().isEnabled()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("蓝牙未开启");
             builder.setMessage("是否打开蓝牙");
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -151,7 +185,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
                 }
             });
             builder.show();
-        }else{
+        } else {
             tryToScan(true);
         }
     }
@@ -160,10 +194,10 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
     protected void onPause() {
         super.onPause();
         RemoteFactory.getRemote().unregisterRemoteCallback(this);
-        if (mBroadcastReceiver!=null){
-            RemoteFactory.getRemote().unregisterEnableReceiver(this,mBroadcastReceiver);
+        if (mBroadcastReceiver != null) {
+            RemoteFactory.getRemote().unregisterEnableReceiver(this, mBroadcastReceiver);
         }
-        if(RemoteFactory.getRemote().isEnabled()){
+        if (RemoteFactory.getRemote().isEnabled()) {
             tryToScan(false);
         }
     }
@@ -173,14 +207,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
         super.onStop();
     }
 
-    private List<Device> mDevicesInfo=new ArrayList<>();
-
-    @Override
-    public void scan(boolean enable) {
-        RemoteFactory.getRemote().scanDevice(enable,this);
-        updateProgressBarItem();
-        updateScanItem();
-    }
+    private List<Device> mDevicesInfo = new ArrayList<>();
 
     @Override
     public void onScan(final Device device) {
@@ -189,13 +216,13 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
             public void run() {
                 String strName = device.getName();
 
-                if(strName==null || strName.length()==0){
+                if (strName == null || strName.length() == 0) {
                     return;
                 }
 
                 byte[] byteName = strName.getBytes();
 
-                if(byteName.length<2){
+                if (byteName.length < 2) {
                     return;
                 }
                 //若前两个字节正确
@@ -207,16 +234,13 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
                 }
             }
         });
-}
+    }
 
     private void updateDeviceList() {
-//        DeviceAdapter arrayAdapter = new DeviceAdapter(SearchActivity.this, R.layout.adapter_device, mDevicesInfo);
-//        mListViewDevices.setAdapter(arrayAdapter);
-
         mHandler.sendEmptyMessage(0);
     }
 
-    private Handler mHandler =new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             DeviceAdapter arrayAdapter = new DeviceAdapter(SearchActivity.this, R.layout.adapter_device, mDevicesInfo);
@@ -226,14 +250,14 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
 
     @Override
     public void onEnableChanged() {
-        if (RemoteFactory.getRemote().isEnabled()){
+        if (RemoteFactory.getRemote().isEnabled()) {
             tryToScan(true);
         }
     }
 
     @Override
     public void onConnectChanged() {
-        if (RemoteFactory.getRemote().getConnectState()== RemoteParent.ConnectState.CONNECTED){
+        if (RemoteFactory.getRemote().getConnectState() == RemoteParent.ConnectState.CONNECTED) {
             finish();
         }
     }
@@ -245,7 +269,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mDevicesInfo==null || mDevicesInfo.size()<=position){
+        if (mDevicesInfo == null || mDevicesInfo.size() <= position) {
             Toast.makeText(SearchActivity.this, "未找到该设备", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -261,7 +285,6 @@ public class SearchActivity extends ParentActivity implements IRemoteScan,IRemot
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 RemoteFactory.getRemote().connect(device);
-//                mHandler.postDelayed(runnableConnectTimeout, CONNECT_TIMEOUT);
             }
         });
         alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {

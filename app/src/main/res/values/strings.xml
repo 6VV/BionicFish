@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">仿生机器鱼</string>
+
+    <string name="start_swim">开始游动</string>
+    <string name="start_light">点亮灯光</string>
+    <string name="black">黑</string>
+    <string name="blue">蓝</string>
+    <string name="green">绿</string>
+    <string name="cyan">青</string>
+    <string name="red">红</string>
+    <string name="magenta">洋红</string>
+    <string name="yellow">黄</string>
+    <string name="white">白</string>
+    <string name="up">前进</string>
+    <string name="right">右转</string>
+    <string name="left">左转</string>
+    <string name="wait">等待</string>
 </resources>

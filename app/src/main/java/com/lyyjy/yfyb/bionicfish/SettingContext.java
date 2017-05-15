@@ -21,7 +21,6 @@ public class SettingContext {
         MANUAL_CLOSE_WIRELESS,
     }
 
-
     private DatabaseManager mDatabaseManager=null;
     private Map<String,Integer> mSettingValues;
     private static SettingContext mInstance=null;

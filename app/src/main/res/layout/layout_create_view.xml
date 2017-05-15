@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/view_list"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+    >
+
+    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishMovementStartView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishMovementStartView>
+
+    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishMovementView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishMovementView>
+
+    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishWaitView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishLightStartView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishLightStartView>h
+
+    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishLightView
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishLightView>
+
+</LinearLayout>

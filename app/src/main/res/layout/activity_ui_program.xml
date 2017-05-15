@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_ui_program"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lyyjy.yfyb.bionicfish.Activity.UiProgramActivity">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:showDividers="middle">
+        <com.lyyjy.yfyb.bionicfish.Program.UiProgram.LayoutCreateView
+            android:id="@+id/layout_create_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"></com.lyyjy.yfyb.bionicfish.Program.UiProgram.LayoutCreateView>
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue"/>
+        <com.lyyjy.yfyb.bionicfish.Program.UiProgram.LayoutDisplayView
+            android:id="@+id/layout_display_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"></com.lyyjy.yfyb.bionicfish.Program.UiProgram.LayoutDisplayView>
+    </LinearLayout>
+    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.DragLayout
+        android:id="@+id/layout_drag_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></com.lyyjy.yfyb.bionicfish.Program.UiProgram.DragLayout>
+
+</FrameLayout>

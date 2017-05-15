@@ -21,41 +21,6 @@
         android:gravity="center_horizontal"
         android:layout_alignParentBottom="true">
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/helpId1"-->
-            <!--android:background="@drawable/ic_action_selected" />-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/helpId2"-->
-            <!--android:background="@drawable/ic_action_unselected" />-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/helpId3"-->
-            <!--android:background="@drawable/ic_action_unselected" />-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/helpId4"-->
-            <!--android:background="@drawable/ic_action_unselected" />-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/helpId5"-->
-            <!--android:background="@drawable/ic_action_unselected" />-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/helpId6"-->
-            <!--android:background="@drawable/ic_action_unselected" />-->
     </LinearLayout>
 
 </RelativeLayout>

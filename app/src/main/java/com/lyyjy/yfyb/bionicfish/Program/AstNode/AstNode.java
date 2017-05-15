@@ -1,8 +1,8 @@
 package com.lyyjy.yfyb.bionicfish.Program.AstNode;
 
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParser;
-import com.lyyjy.yfyb.bionicfish.Program.InterpreterException;
-import com.lyyjy.yfyb.bionicfish.Program.Token;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.InterpreterException;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
 
 /**
  * Created by Administrator on 2016/6/30.

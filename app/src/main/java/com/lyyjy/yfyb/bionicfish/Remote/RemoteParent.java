@@ -38,7 +38,7 @@ public abstract class RemoteParent {
     public abstract boolean isEnabled();
     public abstract boolean isScanning();
 
-    public abstract void scanDevice(boolean enable,IRemoteScan iRemoteScan);
-    public abstract void tryScanDevice(boolean enable,Context context,IRemoteScan iRemoteScan,int permission);
+//    public abstract void scanDevice(boolean enable,IRemoteScan iRemoteScan);
+    public abstract void tryScanDevice(boolean enable,IRemoteScan iRemoteScan);
     public abstract void send(byte[] data);
 }

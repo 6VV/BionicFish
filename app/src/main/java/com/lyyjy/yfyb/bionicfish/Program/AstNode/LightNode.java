@@ -2,9 +2,9 @@ package com.lyyjy.yfyb.bionicfish.Program.AstNode;
 
 
 import com.lyyjy.yfyb.bionicfish.Light.LightColor;
-import com.lyyjy.yfyb.bionicfish.Program.InterpreterException;
-import com.lyyjy.yfyb.bionicfish.Program.Token;
-import com.lyyjy.yfyb.bionicfish.Program.TokenParser;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.InterpreterException;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
 import com.lyyjy.yfyb.bionicfish.Remote.CommandManager;
 
 /**

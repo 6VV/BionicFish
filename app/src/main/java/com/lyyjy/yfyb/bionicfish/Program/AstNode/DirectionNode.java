@@ -1,10 +1,9 @@
 package com.lyyjy.yfyb.bionicfish.Program.AstNode;
 
-import com.lyyjy.yfyb.bionicfish.Program.InterpreterException;
-import com.lyyjy.yfyb.bionicfish.Program.ProgramCommand;
-import com.lyyjy.yfyb.bionicfish.Program.Token;
-import com.lyyjy.yfyb.bionicfish.Program.TokenParser;
-import com.lyyjy.yfyb.bionicfish.Remote.CommandManager;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.InterpreterException;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.ProgramCommand;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
 
 import java.nio.ByteBuffer;
 
@@ -15,7 +14,6 @@ public class DirectionNode extends AstNode {
     private byte mSpeed;
     private byte mTime;
     private String mCommandCode;
-
 
     public DirectionNode(TokenParser parser) throws InterpreterException {
         Token tokenCommand=parser.getLastToken();
@@ -45,13 +43,13 @@ public class DirectionNode extends AstNode {
 
         switch (mCommandCode){
             case ProgramCommand.COMMAND_UP:{
-                result.put(CommandManager.STATUS_FISH_UP);
+                result.put((byte)0x01);
             }break;
             case ProgramCommand.COMMAND_LEFT:{
-                result.put(CommandManager.STATUS_FISH_LEFT);
+                result.put((byte)0x02);
             }break;
             case ProgramCommand.COMMAND_RIGHT:{
-                result.put(CommandManager.STATUS_FISH_RIGHT);
+                result.put((byte)0x03);
             }break;
         }
 

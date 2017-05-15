@@ -1,9 +1,13 @@
 package com.lyyjy.yfyb.bionicfish.Remote;
 
+import android.util.Log;
+
 /**
  * Created by Administrator on 2016/8/9.
  */
 public class CommandManager {
+    private static final String TAG="CommandManager";
+
     public enum CommandCode{
         FISH_UP,
         FISH_LEFT,
@@ -26,7 +30,7 @@ public class CommandManager {
     public static final byte STATUS_FISH_UP =(byte)0x00;      //小鱼前进指令
     public static final byte STATUS_FISH_RIGHT =(byte)0x03;   //小鱼右转指令
     public static final byte STATUS_FISH_LEFT =(byte)0x02;    //小鱼左转指令
-    public static final byte STATUS_FISH_STOP =(byte)0x20;             //小鱼停止指令
+    public static final byte STATUS_FISH_STOP =(byte)0x20;    //小鱼停止指令
 
     private static final byte STATUS_MODE_MANUAL =(byte)0x00;
     private static final byte STATUS_MODE_AUTO =(byte)0x01;
@@ -44,6 +48,7 @@ public class CommandManager {
     private static final byte[] COMMAND_RESET_DEVICE={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4, REQUEST_RESET, STATUS_FINAL};  //重置设备
     public static final byte[] COMMAND_DERECTION_PROGRAM={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3,STATUS_HEAD_4,REQUEST_DIRECTION_PROGRAM};
     public static final byte[] COMMAND_LIGHT_PROGRAM={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3,STATUS_HEAD_4,REQUEST_LIGHT_PROGRAM};
+    public static final byte[] COMMAND_PROGRAM_FINAL={STATUS_FINAL,STATUS_FINAL};   //程序尾
 
     private static byte[] FISH_COMMAND={
             STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4,
@@ -52,20 +57,34 @@ public class CommandManager {
             (byte) 0x03,           //速度
             STATUS_FINAL};
 
+    /*此段代码进行了修改，当向左转、向右转时，速度均保持为最低档，以防止仿生鱼转弯时卡死。
+    * 小鱼调好时，应将其修改过来*/
     public static void sendSwimDirection(CommandCode commandCode){
         RemoteParent remote=RemoteFactory.getRemote();
         switch (commandCode){
             case FISH_LEFT:{
                 setDirection(STATUS_FISH_LEFT);
                 remote.send(FISH_COMMAND);
+
+
+//                byte[] newCommand=FISH_COMMAND.clone();
+//                newCommand[6]=(byte)1;
+//                newCommand[5]=STATUS_FISH_LEFT;
+//                remote.send(newCommand);
             }break;
             case FISH_RIGHT:{
                 setDirection(STATUS_FISH_RIGHT);
                 remote.send(FISH_COMMAND);
+
+//                byte[] newCommand=FISH_COMMAND.clone();
+//                newCommand[6]=(byte)1;
+//                newCommand[5]=STATUS_FISH_RIGHT;
+//                remote.send(newCommand);
             }break;
             case FISH_UP:{
                 setDirection(STATUS_FISH_UP);
                 remote.send(FISH_COMMAND);
+//                Log.e(TAG,"up");
             }break;
         }
     }

@@ -18,7 +18,7 @@ import java.util.Map;
  */
 public class DatabaseManager extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "BluetoothDevice";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
 
     private final String SETTINGS_TABLE_NAME="SettingsTable";
     private final String SETTINGS_COLUMN_NAME="SettingName";
@@ -64,6 +64,7 @@ public class DatabaseManager extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists "+SETTINGS_TABLE_NAME);
+        db.execSQL("drop table if exists "+WIDGET_TABLE_NAME);
         onCreate(db);
     }
 

@@ -22,6 +22,7 @@ import com.lyyjy.yfyb.bionicfish.Activity.HelpterActivity.HelpActivity;
 import com.lyyjy.yfyb.bionicfish.Background.FishBackground;
 import com.lyyjy.yfyb.bionicfish.Background.MainBackground;
 import com.lyyjy.yfyb.bionicfish.Background.WidgetBackground;
+import com.lyyjy.yfyb.bionicfish.ContextUtil;
 import com.lyyjy.yfyb.bionicfish.DataPersistence.DatabaseManager;
 import com.lyyjy.yfyb.bionicfish.Device;
 import com.lyyjy.yfyb.bionicfish.Light.LightColorManager;
@@ -92,12 +93,19 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
         final MenuItem item=menu.findItem(R.id.action_battery);
         mBatteryView=new BatteryView(this);
 
-        mBatteryView.post(new Runnable() {
+        MainActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 item.setActionView(mBatteryView);
             }
         });
+
+//        mBatteryView.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                item.setActionView(mBatteryView);
+//            }
+//        });
     }
 
     @Override
@@ -131,6 +139,9 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
             case R.id.action_pragram:{
                 startActivity(new Intent(MainActivity.this, ProgramActivity.class));
             }break;
+            case R.id.action_ui_program:{
+                startActivity(new Intent(MainActivity.this,UiProgramActivity.class));
+            }break;
             case R.id.action_connect:{
                 changeConnectState();
             }break;
@@ -145,6 +156,9 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
             }break;
             case R.id.action_setting:{
                 changeSettings();
+            }break;
+            case R.id.action_test:{
+                Toast.makeText(ContextUtil.getInstance(),"test",Toast.LENGTH_LONG).show();
             }break;
         }
         return true;
@@ -228,6 +242,12 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (swimMode[0]==0){
+//                    CommandManager.sendSwimMode(CommandManager.CommandCode.AUTO_SWIM);
+//                    try {
+//                        Thread.sleep(300);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
                     CommandManager.sendSwimMode(CommandManager.CommandCode.MANUAL_SWIM);
                 }else{
                     CommandManager.sendSwimMode(CommandManager.CommandCode.AUTO_SWIM);
@@ -417,12 +437,18 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
     }
 
     private void updateConnectStateIcon() {
-        RemoteParent.ConnectState state=RemoteFactory.getRemote().getConnectState();
-        if (state== RemoteParent.ConnectState.CONNECTED){
-            mItemConnectState.setIcon(R.mipmap.connected);
-        }else{
-            mItemConnectState.setIcon(R.mipmap.disconnected);
-        }
+        MainActivity.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RemoteParent.ConnectState state=RemoteFactory.getRemote().getConnectState();
+
+                if (state== RemoteParent.ConnectState.CONNECTED){
+                    mItemConnectState.setIcon(R.mipmap.connected);
+                }else{
+                    mItemConnectState.setIcon(R.mipmap.disconnected);
+                }
+            }
+        });
     }
 
     private void updateSensorIcon() {

@@ -14,10 +14,10 @@ import android.widget.EditText;
 
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParser;
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParserAbstract;
-import com.lyyjy.yfyb.bionicfish.Program.InterpreterException;
-import com.lyyjy.yfyb.bionicfish.Program.ProgramCommand;
-import com.lyyjy.yfyb.bionicfish.Program.Token;
-import com.lyyjy.yfyb.bionicfish.Program.TokenParser;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.InterpreterException;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.ProgramCommand;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
 
 
 /**

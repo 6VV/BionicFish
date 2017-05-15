@@ -1,9 +1,7 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
 import android.content.DialogInterface;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -13,8 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,7 +26,7 @@ import com.lyyjy.yfyb.bionicfish.Light.LightColor;
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.DirectionGrammarParser;
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParser;
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.LightGrammarParser;
-import com.lyyjy.yfyb.bionicfish.Program.ProgramCommand;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.ProgramCommand;
 import com.lyyjy.yfyb.bionicfish.Program.ProgramSender;
 import com.lyyjy.yfyb.bionicfish.R;
 
@@ -39,6 +35,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class ProgramActivity extends ParentActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+//    public TextView mEtDataSended;//发送的指令，测试用
+
     private TextView mTvNote;
     private LinearLayout mLayoutCommand;
     private Button mBtnConfrim;
@@ -55,6 +53,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
 
         initControls();
         mCommandViewColl=new Vector<View>();
+
+//        mEtDataSended = (TextView) findViewById(R.id.etDataSended);
     }
 
     private void initControls() {
@@ -89,8 +89,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-            {
+            case android.R.id.home: {
                 finish();
             }break;
             case R.id.action_save:{
@@ -115,7 +114,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
     }
 
     private void showRemoveDialog() {
-        final String[] fileNames = ProgramFileManager.getFileNames();
+        final ProgramFileManager fileManager=new ProgramFileManager(this);
+        final String[] fileNames = fileManager.getFileNames();
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("删除文件");
         builder.setSingleChoiceItems(fileNames, 0, new DialogInterface.OnClickListener() {
@@ -130,7 +130,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                 if (fileNames==null || fileNames.length==0){
                     Toast.makeText(ProgramActivity.this,"请选择一个文件",Toast.LENGTH_SHORT).show();
                 }else {
-                    ProgramFileManager.removeFile(fileNames[0]);
+                    fileManager.removeFile(fileNames[0]);
                 }
             }
         });
@@ -139,7 +139,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
     }
 
     private void showLoadDialog() {
-        final String[] fileNames = ProgramFileManager.getFileNames();
+        final ProgramFileManager fileManager=new ProgramFileManager(this);
+        final String[] fileNames = fileManager.getFileNames();
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("加载文件");
         builder.setSingleChoiceItems(fileNames, 0, new DialogInterface.OnClickListener() {
@@ -154,8 +155,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                 if (fileNames==null || fileNames.length==0){
                     Toast.makeText(ProgramActivity.this,"请选择一个文件",Toast.LENGTH_SHORT).show();
                 }else {
-                    mEtMoveProgram.setText(ProgramFileManager.getFirstProgram(ProgramActivity.this,fileNames[0]));
-                    mEtLightProgram.setText(ProgramFileManager.getSecondProgram(ProgramActivity.this,fileNames[0]));
+                    mEtMoveProgram.setText(fileManager.getFirstProgram(ProgramActivity.this,fileNames[0]));
+                    mEtLightProgram.setText(fileManager.getSecondProgram(ProgramActivity.this,fileNames[0]));
                     format();
                 }
             }
@@ -179,7 +180,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                 if (fileName.length()==0){
                     Toast.makeText(ProgramActivity.this,"文件名不能为空",Toast.LENGTH_SHORT).show();
                 }else {
-                    String[] fileNames=ProgramFileManager.getFileNames();
+                    ProgramFileManager fileManager=new ProgramFileManager(ProgramActivity.this);
+                    String[] fileNames=fileManager.getFileNames();
                     boolean isFindFile=false;
                     if (fileNames!=null) {
                         for (String name : fileNames) {
@@ -212,7 +214,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
             }
 
             private void saveFile(String fileName) {
-                ProgramFileManager.saveFile(ProgramActivity.this,fileName,mEtMoveProgram.getText().toString(),mEtLightProgram.getText().toString());
+                ProgramFileManager fileManager=new ProgramFileManager(ProgramActivity.this);
+                fileManager.saveFile(ProgramActivity.this,fileName,mEtMoveProgram.getText().toString(),mEtLightProgram.getText().toString());
             }
         });
         builder.setNegativeButton("取消",null);
@@ -257,7 +260,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
             case ProgramCommand.COMMAND_RIGHT:{
                 String time=((EditText)mCommandViewColl.elementAt(2)).getText().toString();
                 if (time.equals("0")){
-                    time="无限";
+                    time="0";
                 }
                 mTvNote.setText(String.format(ProgramCommand.COMMANDS.get(command),
                         ((Spinner)mCommandViewColl.elementAt(1)).getSelectedItem().toString(),
@@ -271,7 +274,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
             case ProgramCommand.COMMAND_LIGHT:{
                 String strTime=((EditText)mCommandViewColl.elementAt(2)).getText().toString();
                 if (strTime.equals("0")){
-                    strTime="无限";
+                    strTime="0";
                 }
                 else {
                     float time=0;
@@ -279,7 +282,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                         strTime= String.valueOf((float) (Integer.parseInt(strTime)/10.0));
                     }catch (NumberFormatException e){
                         ((EditText)mCommandViewColl.elementAt(2)).setText(0);
-                        strTime="无限";
+                        strTime="0";
                     }
                 }
 
@@ -424,6 +427,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                 insertCommand(commandLine);
             }break;
             case R.id.btnSendProgram:{
+//                mEtDataSended.setText("");
                 ProgramSender programSender=new ProgramSender(this);
 //                programSender.resetSendTimes();
                 programSender.sendData(mEtMoveProgram.getText().toString(),mEtLightProgram.getText().toString());

@@ -1,9 +1,8 @@
 package com.lyyjy.yfyb.bionicfish.Program.AstNode;
 
-import com.lyyjy.yfyb.bionicfish.Program.InterpreterException;
-import com.lyyjy.yfyb.bionicfish.Program.Token;
-import com.lyyjy.yfyb.bionicfish.Program.TokenParser;
-import com.lyyjy.yfyb.bionicfish.Remote.CommandManager;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.InterpreterException;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
+import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
 
 import java.nio.ByteBuffer;
 
@@ -23,7 +22,7 @@ public class WaitNode extends AstNode {
     public byte[] interpret() {
         ByteBuffer result=ByteBuffer.allocate(3);
 
-        result.put(CommandManager.STATUS_FISH_STOP);
+        result.put((byte)0x00);
         result.put(new byte[1]);
         result.put(mTime);
 

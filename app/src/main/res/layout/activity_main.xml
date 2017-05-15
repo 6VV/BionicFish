@@ -36,17 +36,6 @@
         android:src="@drawable/fish_left"
         android:background="@android:color/transparent"/>
 
-    <ImageButton
-        android:id="@+id/btnFishRight"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_below="@+id/viewLocation"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="130dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/fish_right"
-        android:background="@android:color/transparent"/>
-
     <com.lyyjy.yfyb.bionicfish.Speed.SpeedView
         android:id="@+id/viewFishSpeed"
         android:layout_width="80dp"
@@ -78,5 +67,17 @@
         android:scaleType="centerInside"
         android:src="@drawable/fish_decelerate"
         android:id="@+id/btnFishDecelerate"/>
+
+    <ImageButton
+        android:id="@+id/btnFishRight"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="130dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/fish_right"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/btnFishUp"
+        android:layout_toEndOf="@+id/btnFishLeft"
+        android:layout_marginStart="11dp"/>
 
 </RelativeLayout>
