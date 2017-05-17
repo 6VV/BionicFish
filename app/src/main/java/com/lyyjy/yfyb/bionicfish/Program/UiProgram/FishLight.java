@@ -11,7 +11,9 @@ import android.view.View;
  * Created by Administrator on 2017/2/14.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class FishLight extends View {
+    @SuppressWarnings("unused")
     private static final String TAG=FishLight.class.getSimpleName();
 
     private int mRadius=5;  //半径

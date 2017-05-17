@@ -1,5 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.Light;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,8 +13,9 @@ import com.lyyjy.yfyb.bionicfish.Remote.CommandManager;
 /**
  * Created by Administrator on 2016/8/10.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class LightColorManager {
-    private Context mContext;
+    private final Context mContext;
 
     public LightColorManager(Context context){
         mContext=context;
@@ -23,7 +25,7 @@ public class LightColorManager {
         AlertDialog.Builder builder=new AlertDialog.Builder(mContext);
         builder.setTitle("设置灯光颜色");
         LayoutInflater inflater=LayoutInflater.from(mContext);
-        LinearLayout layout= (LinearLayout) inflater.inflate(R.layout.dialog_choose_color, null);
+        @SuppressLint("InflateParams") LinearLayout layout= (LinearLayout) inflater.inflate(R.layout.dialog_choose_color, null);
         final LightColorSpinner colorSpinner= (LightColorSpinner) layout.findViewById(R.id.spinnerLightColor);
         builder.setView(layout);
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {

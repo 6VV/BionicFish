@@ -5,6 +5,7 @@ import java.util.HashMap;
 /**
  * Created by Administrator on 2016/5/5.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class LightColor {
     public static final String COLOR_WHITE_NAME="WHITE";
     public static final String COLOR_YELLOW_NAME="YELLOW";
@@ -28,8 +29,9 @@ public class LightColor {
         }
     };
 
-    private int mRgbColor;
+    private final int mRgbColor;
 
+    @SuppressWarnings("unused")
     public LightColor(String color){
         mRgbColor=COLOR_MAP.get(color);
     }

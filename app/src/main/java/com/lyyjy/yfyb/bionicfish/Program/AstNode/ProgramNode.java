@@ -6,12 +6,13 @@ import java.util.Vector;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramNode extends AstNode {
-    private Vector<AstNode> mChildNodes=new Vector<AstNode>();
+    private final Vector<AstNode> mChildNodes=new Vector<>();
 
     @Override
     public byte[] interpret() {
-        Vector<byte[]> data=new Vector<byte[]>();
+        Vector<byte[]> data=new Vector<>();
         int length=0;
         for (AstNode childNode : mChildNodes) {
             byte[] bytes=childNode.interpret();

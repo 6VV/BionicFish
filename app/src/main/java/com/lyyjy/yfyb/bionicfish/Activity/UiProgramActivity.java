@@ -1,5 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.lyyjy.yfyb.bionicfish.DataPersistence.ProgramFileManager;
 import com.lyyjy.yfyb.bionicfish.Light.LightColor;
 import com.lyyjy.yfyb.bionicfish.Program.ProgramSender;
 import com.lyyjy.yfyb.bionicfish.Program.UiProgram.DragLayout;
@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 public class UiProgramActivity extends ParentActivity {
 
+    @SuppressWarnings("unused")
     private static final String TAG=UiProgramActivity.class.getSimpleName();
     private HashMap<String,String> mCommandMap;
 
@@ -98,7 +99,7 @@ public class UiProgramActivity extends ParentActivity {
 
     private void showSaveDialog() {
         LayoutInflater layoutInflater=LayoutInflater.from(this);
-        LinearLayout layout= (LinearLayout) layoutInflater.inflate(R.layout.dialog_save_file,null);
+        @SuppressLint("InflateParams") LinearLayout layout= (LinearLayout) layoutInflater.inflate(R.layout.dialog_save_file,null);
         final EditText etFile=(EditText) layout.findViewById(R.id.etFileName);
 
         final AlertDialog.Builder builder=new AlertDialog.Builder(this);
@@ -190,7 +191,9 @@ public class UiProgramActivity extends ParentActivity {
                 if (fileNames==null || fileNames.length==0){
                     Toast.makeText(UiProgramActivity.this,"请选择一个文件",Toast.LENGTH_SHORT).show();
                 }else {
-                    fileManager.removeFile(fileNames[0]);
+                    if(!fileManager.removeFile(fileNames[0])){
+                        Toast.makeText(UiProgramActivity.this,"删除文件失败",Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -209,17 +212,17 @@ public class UiProgramActivity extends ParentActivity {
             StringBuilder newLineText=new StringBuilder();
 
             //更新一行的命令
-            for (int j=0;j<commands.length;++j){
-                String newCommand = mCommandMap.get(commands[j]);
+            for (String command:commands){
+                String newCommand = mCommandMap.get(command);
                 if (newCommand!=null){
                     newLineText.append(newCommand);
                 }else{
-                    newLineText.append(commands[j]);
+                    newLineText.append(command);
                 }
                 newLineText.append(" ");
             }
 
-            stringBuilder.append(newLineText.toString()+"\n");
+            stringBuilder.append(newLineText.toString()).append("\n");
         }
 
         return stringBuilder.toString();

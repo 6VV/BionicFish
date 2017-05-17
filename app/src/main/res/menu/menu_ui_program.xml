@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_execute"
-          android:title="执行"
-          app:showAsAction="ifRoom"></item>
-    <item android:id="@+id/menu_simulation"
-          android:title="仿真"
-          app:showAsAction="ifRoom"></item>
+    <item
+        android:id="@+id/menu_execute"
+        android:title="@string/execute"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_simulation"
+        android:title="@string/simulation"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_clear"
-        android:title="清空"
+        android:title="@string/clear"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_save"
-        android:title="保存"
+        android:title="@string/save"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_load"
-        android:title="加载"
+        android:title="@string/load"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menu_remove"
-        android:title="删除"
+        android:title="@string/delete"
         app:showAsAction="ifRoom"/>
 </menu>

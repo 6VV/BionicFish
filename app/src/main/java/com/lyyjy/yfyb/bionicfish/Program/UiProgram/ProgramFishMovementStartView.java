@@ -11,6 +11,7 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/13.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFishMovementStartView extends ProgramView implements ProgramMoveInterface{
     private static boolean mIsAlreadyExist=false;
 
@@ -48,8 +49,8 @@ public class ProgramFishMovementStartView extends ProgramView implements Program
     }
 
     private void init(Context context){
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_movement_start, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_movement_start, this);
+//        addView(view);
 
         mProgramViewBackground = (ProgramFishStartBackground) view.findViewById(R.id.custom_view);
         mProgramViewBackground.setBackgroundShader(ProgramViewBackground.SHADER_MOVEMENT);

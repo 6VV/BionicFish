@@ -11,7 +11,9 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/13.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFishLightStartView extends ProgramView implements ProgramLightInterface {
+    @SuppressWarnings("unused")
     private static final String TAG=ProgramFishLightStartView.class.getSimpleName();
 
     private static boolean mIsAlreadyExist=false;
@@ -50,8 +52,8 @@ public class ProgramFishLightStartView extends ProgramView implements ProgramLig
     }
 
     private void init(Context context){
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_light_start, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_light_start, this);
+//        addView(view);
 
         mProgramViewBackground = (ProgramFishStartBackground) view.findViewById(R.id.custom_view);
     }

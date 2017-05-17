@@ -8,8 +8,9 @@ import android.widget.EditText;
  * Created by Administrator on 2017/2/14.
  */
 
-public class TimeLengthTextWatcher implements TextWatcher {
-    private EditText mEditText;
+@SuppressWarnings("DefaultFileTemplate")
+class TimeLengthTextWatcher implements TextWatcher {
+    private final EditText mEditText;
 
     TimeLengthTextWatcher(EditText editText){
         mEditText=editText;

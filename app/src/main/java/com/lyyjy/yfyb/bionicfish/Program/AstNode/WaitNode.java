@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class WaitNode extends AstNode {
     private byte mTime=0;
 

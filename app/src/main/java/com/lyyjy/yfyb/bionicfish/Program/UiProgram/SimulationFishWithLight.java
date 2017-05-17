@@ -17,7 +17,9 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/14.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class SimulationFishWithLight extends FrameLayout {
+    @SuppressWarnings("unused")
     private static final String TAG = SimulationFishWithLight.class.getSimpleName();
 
     public enum Movement{
@@ -40,7 +42,7 @@ public class SimulationFishWithLight extends FrameLayout {
     private static final float INIT_ROTATION_OFFSET =2;    //初始旋转角度
 
     private Movement mMovement= Movement.STOP;   //当前方向
-    private PointF mPosition=new PointF();  //当前位置
+    private final PointF mPosition=new PointF();  //当前位置
     private float mRotation=0;  //当前角度
     private float mXYOffset =INIT_XY_OFFSET;    //xy方向每次移动的间隔
     private float mRotationOffset =INIT_ROTATION_OFFSET;    //每次旋转的角度
@@ -62,8 +64,8 @@ public class SimulationFishWithLight extends FrameLayout {
     }
 
     private void init(Context context) {
-        View view= LayoutInflater.from(context).inflate(R.layout.layout_fish_with_light,null);
-        addView(view);
+        View view= LayoutInflater.from(context).inflate(R.layout.layout_fish_with_light,this);
+//        addView(view);
 
         mSimulationFish = (ImageView) view.findViewById(R.id.fish_view);
         mFishLight = (FishLight) view.findViewById(R.id.fish_light_view);

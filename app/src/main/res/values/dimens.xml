@@ -1,11 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin" tools:ignore="UnusedResources">16dp</dimen>
+    <dimen name="activity_vertical_margin" tools:ignore="UnusedResources">16dp</dimen>
 
-    <dimen name="custom_view_width">300dp</dimen>
-    <dimen name="custom_view_height">100dp</dimen>
-    <dimen name="custom_view_layout_margin_top">20dp</dimen>
+    <!--<dimen name="custom_view_width">300dp</dimen>-->
+    <!--<dimen name="custom_view_height">100dp</dimen>-->
+    <!--<dimen name="custom_view_layout_margin_top">20dp</dimen>-->
 
     <dimen name="program_block_fish_movement_top_left_line_width">20dp</dimen>
     <dimen name="program_block_fish_background_raised_radius">10dp</dimen>

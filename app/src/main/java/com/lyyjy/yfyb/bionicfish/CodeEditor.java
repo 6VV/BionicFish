@@ -10,7 +10,6 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
-import android.widget.EditText;
 
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParser;
 import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParserAbstract;
@@ -23,7 +22,8 @@ import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
 /**
  * Created by Administrator on 2016/7/7.
  */
-public class CodeEditor extends EditText {
+@SuppressWarnings("DefaultFileTemplate")
+public class CodeEditor extends android.support.v7.widget.AppCompatEditText {
     private GrammarParserAbstract mGrammarParser=new GrammarParser();
 
     public CodeEditor(Context context) {
@@ -111,8 +111,10 @@ public class CodeEditor extends EditText {
             endIndex = tem;
         }
 
-        for (; mStartIndex > 0 && s.charAt(mStartIndex) != '\n'; --mStartIndex) ;
-        for (; endIndex < s.length() - 1 && s.charAt(endIndex) != '\n'; ++endIndex) ;
+        //noinspection StatementWithEmptyBody
+        for (; mStartIndex > 0 && s.charAt(mStartIndex) != '\n'; --mStartIndex);
+        //noinspection StatementWithEmptyBody
+        for (; endIndex < s.length() - 1 && s.charAt(endIndex) != '\n'; ++endIndex);
 
         return getText().toString().substring(mStartIndex, endIndex);
     }

@@ -1,6 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.DataPersistence;
 
-import android.content.ContentUris;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2016/8/10.
  */
+@SuppressWarnings({"DefaultFileTemplate", "FieldCanBeLocal"})
 public class DatabaseManager extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "BluetoothDevice";
     private static final int DATABASE_VERSION = 5;
@@ -40,7 +41,7 @@ public class DatabaseManager extends SQLiteOpenHelper{
             +WIDGET_RIGHT+" integer,"
             +WIDGET_BOTTOM+" integer)";
 
-    public static DatabaseManager mInstance=null;
+    private static DatabaseManager mInstance=null;
     public static DatabaseManager getInstance(){
         if (mInstance==null){
             mInstance = new DatabaseManager(ContextUtil.getInstance(), DATABASE_NAME, null, DATABASE_VERSION);
@@ -48,6 +49,7 @@ public class DatabaseManager extends SQLiteOpenHelper{
         return mInstance;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private DatabaseManager(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -72,9 +74,10 @@ public class DatabaseManager extends SQLiteOpenHelper{
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from " + SETTINGS_TABLE_NAME,null);
 
-        Map map=new HashMap();
+        Map map=new HashMap<>();
         if (cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
+                //noinspection unchecked
                 map.put(cursor.getString(cursor.getColumnIndex(SETTINGS_COLUMN_NAME)), cursor.getInt(cursor.getColumnIndex(SETTINGS_COLUMN_VALUE)));
             }
         }
@@ -82,6 +85,7 @@ public class DatabaseManager extends SQLiteOpenHelper{
         cursor.close();
         db.close();
 
+        //noinspection unchecked
         return map;
     }
 
@@ -97,7 +101,7 @@ public class DatabaseManager extends SQLiteOpenHelper{
         db.close();
     }
 
-    public void repalceWidgetLayout(Map<Integer,Rect> map){
+    public void replaceWidgetLayout(Map<Integer,Rect> map){
         SQLiteDatabase db=getWritableDatabase();
         db.beginTransaction();
         for (int viewId : map.keySet()) {
@@ -120,10 +124,11 @@ public class DatabaseManager extends SQLiteOpenHelper{
         SQLiteDatabase db = getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from " + WIDGET_TABLE_NAME,null);
 
-        Map map=new HashMap<Integer,Rect>();
+        @SuppressLint("UseSparseArrays") Map map=new HashMap<>();
         if (cursor.getCount() > 0) {
             if (cursor.moveToFirst()) {
                 do {
+                    //noinspection unchecked
                     map.put(cursor.getInt(cursor.getColumnIndex(WIDGET_COLUMN_ID)),
                             new Rect(cursor.getInt(cursor.getColumnIndex(WIDGET_LEFT)),
                                     cursor.getInt(cursor.getColumnIndex(WIDGET_TOP)),
@@ -136,6 +141,7 @@ public class DatabaseManager extends SQLiteOpenHelper{
         cursor.close();
         db.close();
 
+        //noinspection unchecked
         return map;
     }
 }

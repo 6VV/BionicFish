@@ -3,6 +3,7 @@ package com.lyyjy.yfyb.bionicfish.Program.TextProgram;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class Token {
     private int mLineNumber=0;
     private String mText="";

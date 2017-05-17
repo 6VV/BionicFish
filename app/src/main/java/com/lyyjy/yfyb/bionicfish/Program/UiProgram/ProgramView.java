@@ -15,7 +15,9 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/2/8.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public abstract class ProgramView extends FrameLayout {
+    @SuppressWarnings("unused")
     private static final String TAG = ProgramView.class.getSimpleName();
 
     private static final int COLOR_INSERTED = Color.GREEN;   //被插入时的颜色
@@ -23,9 +25,9 @@ public abstract class ProgramView extends FrameLayout {
     private static final int COLOR_CAPTURED = Color.RED;  //被拖动时的颜色
 
     ProgramViewBackground mProgramViewBackground;
-    ProgramBlock mProgramBlock =null;  //控件所在块
+    private ProgramBlock mProgramBlock =null;  //控件所在块
 
-    protected ArrayList<View> mChildViews=new ArrayList<>();
+    final ArrayList<View> mChildViews=new ArrayList<>();
 
     public abstract ProgramView clone(Context context);
     public abstract String executeText();
@@ -101,7 +103,7 @@ public abstract class ProgramView extends FrameLayout {
         mProgramViewBackground.setColor(color);
     }
 
-    protected void setSpinnerText(Spinner spinner, String text) {
+    void setSpinnerText(Spinner spinner, String text) {
         int count=spinner.getCount();
         for (int i=0;i<count;++i){
             if (spinner.getItemAtPosition(i).equals(text)){

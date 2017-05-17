@@ -1,15 +1,12 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -17,14 +14,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.lyyjy.yfyb.bionicfish.Device;
 import com.lyyjy.yfyb.bionicfish.DeviceAdapter;
+import com.lyyjy.yfyb.bionicfish.R;
 import com.lyyjy.yfyb.bionicfish.Remote.IRemoteCallback;
 import com.lyyjy.yfyb.bionicfish.Remote.IRemoteScan;
-import com.lyyjy.yfyb.bionicfish.R;
 import com.lyyjy.yfyb.bionicfish.Remote.RemoteFactory;
 import com.lyyjy.yfyb.bionicfish.Remote.RemoteParent;
 
@@ -37,15 +35,19 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
 
     private BroadcastReceiver mBroadcastReceiver = null;
 
-    private ListView mListViewDevices;
+    private final List<Device> mDevicesInfo = new ArrayList<>();
+    private ArrayAdapter<Device> mDeviceArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        mListViewDevices = ((ListView) findViewById(R.id.lvDevices));
-        mListViewDevices.setOnItemClickListener(this);
+        ListView listViewDevices = ((ListView) findViewById(R.id.lvDevices));
+        listViewDevices.setOnItemClickListener(this);
+
+        mDeviceArrayAdapter = new DeviceAdapter(SearchActivity.this, R.layout.adapter_device, mDevicesInfo);
+        listViewDevices.setAdapter(mDeviceArrayAdapter);
     }
 
     @Override
@@ -93,7 +95,8 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
     private void tryToScan(boolean enable) {
         //清空搜索记录
         if (enable) {
-            mDevicesInfo = new ArrayList<>();
+//            mDevicesInfo = new ArrayList<>();
+            mDevicesInfo.clear();
             updateDeviceList();
         }
 
@@ -108,7 +111,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
                 //如果需要向用户解释，为什么要申请该权限
-                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                     Toast.makeText(this, "Android6.0以上版本需要开启定位才能搜索蓝牙设备", Toast.LENGTH_LONG).show();
                 }
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_FINE_LOCATION);
@@ -157,10 +160,6 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     protected void onResume() {
@@ -193,7 +192,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
     @Override
     protected void onPause() {
         super.onPause();
-        RemoteFactory.getRemote().unregisterRemoteCallback(this);
+        RemoteFactory.getRemote().unregisterRemoteCallback();
         if (mBroadcastReceiver != null) {
             RemoteFactory.getRemote().unregisterEnableReceiver(this, mBroadcastReceiver);
         }
@@ -203,17 +202,13 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    private List<Device> mDevicesInfo = new ArrayList<>();
-
-    @Override
     public void onScan(final Device device) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if (device==null){
+                    return;
+                }
                 String strName = device.getName();
 
                 if (strName == null || strName.length() == 0) {
@@ -236,17 +231,15 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
         });
     }
 
-    private void updateDeviceList() {
-        mHandler.sendEmptyMessage(0);
-    }
 
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            DeviceAdapter arrayAdapter = new DeviceAdapter(SearchActivity.this, R.layout.adapter_device, mDevicesInfo);
-            mListViewDevices.setAdapter(arrayAdapter);
-        }
-    };
+    private void updateDeviceList() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mDeviceArrayAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 
     @Override
     public void onEnableChanged() {
@@ -269,6 +262,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //noinspection ConstantConditions
         if (mDevicesInfo == null || mDevicesInfo.size() <= position) {
             Toast.makeText(SearchActivity.this, "未找到该设备", Toast.LENGTH_SHORT).show();
             return;
@@ -287,12 +281,7 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
                 RemoteFactory.getRemote().connect(device);
             }
         });
-        alertDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                return;
-            }
-        });
+        alertDialog.setNegativeButton("取消", null);
         alertDialog.show();
     }
 }

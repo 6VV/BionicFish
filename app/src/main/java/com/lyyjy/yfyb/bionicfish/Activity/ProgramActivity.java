@@ -1,5 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -13,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -39,8 +39,6 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
 
     private TextView mTvNote;
     private LinearLayout mLayoutCommand;
-    private Button mBtnConfrim;
-    private Button mBtnSend;
     private CodeEditor mEtMoveProgram;
     private CodeEditor mEtLightProgram;
 
@@ -52,7 +50,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
         setContentView(R.layout.activity_program);
 
         initControls();
-        mCommandViewColl=new Vector<View>();
+        mCommandViewColl=new Vector<>();
 
 //        mEtDataSended = (TextView) findViewById(R.id.etDataSended);
     }
@@ -67,20 +65,17 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
 
         mLayoutCommand = (LinearLayout) findViewById(R.id.layoutCommand);
         mTvNote= (TextView) findViewById(R.id.tvNote);
-        mBtnConfrim= (Button) findViewById(R.id.btnConfirm);
-        mBtnSend= (Button) findViewById(R.id.btnSendProgram);
-
-        mBtnConfrim.setOnClickListener(this);
-        mBtnSend.setOnClickListener(this);
+        findViewById(R.id.btnConfirm).setOnClickListener(this);
+        findViewById(R.id.btnSendProgram).setOnClickListener(this);
     }
 
     private void initCommands() {
-        List<String> commands=new ArrayList<String>();
+        List<String> commands=new ArrayList<>();
         for (String command : ProgramCommand.COMMANDS.keySet()) {
             commands.add(command);
         }
 
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,commands);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item,commands);
         Spinner spinner= (Spinner) findViewById(R.id.spinnerCommand);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -130,7 +125,9 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                 if (fileNames==null || fileNames.length==0){
                     Toast.makeText(ProgramActivity.this,"请选择一个文件",Toast.LENGTH_SHORT).show();
                 }else {
-                    fileManager.removeFile(fileNames[0]);
+                    if (!fileManager.removeFile(fileNames[0])){
+                        Toast.makeText(ProgramActivity.this,"删除文件失败",Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -167,7 +164,7 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
 
     private void showSaveDialog() {
         LayoutInflater layoutInflater=LayoutInflater.from(this);
-        LinearLayout layout= (LinearLayout) layoutInflater.inflate(R.layout.dialog_save_file,null);
+        @SuppressLint("InflateParams") LinearLayout layout= (LinearLayout) layoutInflater.inflate(R.layout.dialog_save_file,null);
         final EditText etFile=(EditText) layout.findViewById(R.id.etFileName);
 
         final AlertDialog.Builder builder=new AlertDialog.Builder(this);
@@ -277,7 +274,6 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                     strTime="0";
                 }
                 else {
-                    float time=0;
                     try{
                         strTime= String.valueOf((float) (Integer.parseInt(strTime)/10.0));
                     }catch (NumberFormatException e){
@@ -294,12 +290,12 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
     }
 
     private void addSpeedSpinner(LinearLayout.LayoutParams layoutParams) {
-        List<String> speedList=new ArrayList<String>();
+        List<String> speedList=new ArrayList<>();
         speedList.add("1");
         speedList.add("2");
         speedList.add("3");
         speedList.add("4");
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,speedList);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,speedList);
 
         Spinner spinner=new Spinner(this);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -372,12 +368,12 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
     }
 
     private void addLightSpinner(LinearLayout.LayoutParams layoutParams) {
-        List<String> colors=new ArrayList<String>();
+        List<String> colors=new ArrayList<>();
         for (String color :
                 LightColor.COLOR_MAP.keySet()) {
             colors.add(color);
         }
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,colors);
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,colors);
         final Spinner spinner=new Spinner(this);
         spinner.setAdapter(adapter);
         spinner.setBackgroundColor(LightColor.COLOR_MAP.get(spinner.getSelectedItem().toString()));
@@ -416,7 +412,8 @@ public class ProgramActivity extends ParentActivity implements View.OnClickListe
                 for (View view : mCommandViewColl) {
                     if (view instanceof TextView){
                         commandLine+=((TextView)view).getText().toString()+" ";
-                    } else if (view instanceof EditText){
+                    } else //noinspection ConstantConditions
+                        if (view instanceof EditText){
                         commandLine+=((EditText)view).getText().toString()+" ";
                     }else if (view instanceof Spinner){
                         commandLine+=((Spinner)view).getSelectedItem().toString()+" ";

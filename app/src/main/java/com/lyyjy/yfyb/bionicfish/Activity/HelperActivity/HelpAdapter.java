@@ -1,6 +1,5 @@
-package com.lyyjy.yfyb.bionicfish.Activity.HelpterActivity;
+package com.lyyjy.yfyb.bionicfish.Activity.HelperActivity;
 
-import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +9,9 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/8/3.
  */
-public class HelpAdapter extends PagerAdapter{
-    private List<View> mViews;
+@SuppressWarnings("DefaultFileTemplate")
+class HelpAdapter extends PagerAdapter{
+    private final List<View> mViews;
 
     public HelpAdapter(List<View> views){
         mViews=views;

@@ -21,27 +21,25 @@ import java.nio.ByteBuffer;
 /**
  * Created by Administrator on 2016/7/15.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramSender implements IRemoteCallback {
+    @SuppressWarnings("unused")
     private static final String TAG = "ProgramSender";
-    private final int FRAME_LENGTH=17;
+    private static final int FRAME_LENGTH=17;
 
-    private Context mContext;
+    private final Context mContext;
     private ByteBuffer mByteBuffer;
 //    private int mSendTimes = 0;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int MAX_SENT_TIME=500;
 
-
-//    public void resetSendTimes(){
-//        mSendTimes=0;
-//    }
-//    private int mCurrentIndex=0;
 
     public ProgramSender(Context context) {
         mContext = context;
     }
 
     public void sendData(String directionText,String lightText){
-        ByteBuffer directionBuffer=getDataBuffer(directionText, CommandManager.COMMAND_DERECTION_PROGRAM,new DirectionGrammarParser());
+        ByteBuffer directionBuffer=getDataBuffer(directionText, CommandManager.COMMAND_DIRECTION_PROGRAM,new DirectionGrammarParser());
         ByteBuffer lightBuffer=getDataBuffer(lightText, CommandManager.COMMAND_LIGHT_PROGRAM,new LightGrammarParser());
 
         if (directionBuffer==null && lightBuffer==null){
@@ -67,12 +65,6 @@ public class ProgramSender implements IRemoteCallback {
         try {
             grammarParser.parse(parser);
             byte[] dataText = grammarParser.getRootNode().interpret();
-
-//            String info=new String();
-//            for (byte var :dataText) {
-//                info=info+String.valueOf(var)+' ';
-//            }
-//            Log.e("Data", info);
 
             if(dataText.length==0){
                 return null;
@@ -120,43 +112,38 @@ public class ProgramSender implements IRemoteCallback {
         }
         if (data[0]==CommandManager.BACK_PROGRAM)
         {
-//            Log.e(TAG,"BACK_PROGRAM");
             if (mIsSending){
                 send();
             }
         }
     }
 
-    private final int HANDLER_COMMAND=1;
-    private final int HANDLER_AUTO_SWIM=2;
+    private static final int HANDLER_COMMAND=1;
+    private static final int HANDLER_AUTO_SWIM=2;
 
-    private class HandlerSendData extends Handler{
+    private static class HandlerSendData extends Handler{
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case HANDLER_COMMAND:{
+                case ProgramSender.HANDLER_COMMAND:{
                     byte[] data=msg.getData().getByteArray("data");
-
-//            String info = byteToHexString(data);
-//            Log.e("Data", info);
-//            TextView view=((ProgramActivity)mContext).mEtDataSended;
-//            view.setText(view.getText()+"\n"+info);
 
                     RemoteFactory.getRemote().send(data);
                 }break;
-                case HANDLER_AUTO_SWIM:{
+                case ProgramSender.HANDLER_AUTO_SWIM:{
                     CommandManager.sendSwimMode(CommandManager.CommandCode.AUTO_SWIM);
                 }break;
-                default:return;
+                default:
             }
 
         }
     }
 
+    @SuppressWarnings("unused")
     @NonNull
     private String byteToHexString(byte[] data) {
         StringBuilder sb = new StringBuilder();
-        String tmp = null;
+        String tmp ;
         for (byte b : data)
         {
             // 将每个字节与0xFF进行与运算，然后转化为10进制，然后借助于Integer再转化为16进制
@@ -165,12 +152,12 @@ public class ProgramSender implements IRemoteCallback {
             {
                 tmp = "0" + tmp;
             }
-            sb.append(tmp+" ");
+            sb.append(tmp).append(" ");
         }
         return sb.toString();
     }
 
-    HandlerSendData handlerSendData=new HandlerSendData();
+    private final HandlerSendData handlerSendData=new HandlerSendData();
 
     private void send(){
         handlerTimeOut.removeCallbacks(runnableTimeOut);
@@ -180,8 +167,7 @@ public class ProgramSender implements IRemoteCallback {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        Log.e("Position", String.valueOf(mByteBuffer.position()));
-//        Log.e("Length", String.valueOf(mByteBuffer.limit()));
+
         //发送指令完毕后，发送自动游指令
         if (mByteBuffer.position()>=mByteBuffer.limit()){
             Message msg=new Message();
@@ -209,15 +195,11 @@ public class ProgramSender implements IRemoteCallback {
     }
 
     private boolean mIsSending=false;
-    Handler handlerTimeOut=new Handler();
-    Runnable runnableTimeOut=new Runnable() {
+    private final Handler handlerTimeOut=new Handler();
+    private final Runnable runnableTimeOut=new Runnable() {
         @Override
         public void run() {
-//            if (mSendTimes<MAX_SENT_TIME){
-//               mByteBuffer.rewind();
-//                send();
-//                ++mSendTimes;
-//            }else{
+
                 mIsSending=false;
                 Toast.makeText(mContext,"发送失败\n请重新发送",Toast.LENGTH_SHORT).show();
 //            }

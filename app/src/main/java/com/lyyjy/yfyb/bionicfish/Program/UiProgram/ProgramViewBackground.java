@@ -17,26 +17,29 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/13.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public abstract class ProgramViewBackground extends View {
+    @SuppressWarnings("unused")
     private static final String TAG = ProgramFishBackground.class.getSimpleName();
 
     private static final Shader SHADER_NORMAL = new LinearGradient(0, 0, 40, 60, new int[]{
             Color.argb(150, 255, 100, 100), Color.argb(150, 100, 255, 100), Color.argb(150, 100, 100, 255)}, null,
             Shader.TileMode.REPEAT);
-    private static final Shader SHADER_UNABLED = new LinearGradient(0, 0, 40, 60, new int[]{
-            Color.argb(100, 50, 50, 50), Color.argb(100, 100, 100, 100), Color.argb(100, 150, 150, 150)}, null,
-            Shader.TileMode.REPEAT);
+//    private static final Shader SHADER_UNABLE = new LinearGradient(0, 0, 40, 60, new int[]{
+//            Color.argb(100, 50, 50, 50), Color.argb(100, 100, 100, 100), Color.argb(100, 150, 150, 150)}, null,
+//            Shader.TileMode.REPEAT);
     public static final Shader SHADER_MOVEMENT=new LinearGradient(0, 0, 40, 60, new int[] {
             Color.BLUE, Color.argb(200,50,50,255), Color.argb(100,20,20,255)}, null,
             Shader.TileMode.REPEAT);
 
     private Paint mPaint;
     private Paint mStrokePaint; //外部框架画笔
-    protected Path mPath;
+    Path mPath;
 
-    protected int mLeftWidth = 0;    //左边宽
-    protected int mRaisedRadius = 0;    //凸起圆弧半径
-    protected int mSmoothRadius = 0;    //平滑过渡圆弧半径
+    int mLeftWidth = 0;    //左边宽
+    int mRaisedRadius = 0;    //凸起圆弧半径
+    @SuppressWarnings("unused")
+    int mSmoothRadius = 0;    //平滑过渡圆弧半径
 
     public int getRadius() {
         return mRaisedRadius;
@@ -76,7 +79,7 @@ public abstract class ProgramViewBackground extends View {
 
     protected abstract void updatePath();
 
-    boolean mIsFirstDraw = true;
+    private boolean mIsFirstDraw = true;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -122,27 +125,28 @@ public abstract class ProgramViewBackground extends View {
         invalidate();
     }
 
+    @SuppressWarnings("SameParameterValue")
     public void setBackgroundShader(Shader shader) {
         mPaint.setShader(shader);
         invalidate();
     }
 
     //右边宽
-    protected int rightLineLength() {
+    int rightLineLength() {
         return getWidth() - mLeftWidth - 2 * getRadius();
     }
 
     //默认左边宽
-    protected int defaultLeftLineLength() {
+    int defaultLeftLineLength() {
         return (int) getResources().getDimension(R.dimen.program_block_fish_movement_top_left_line_width);
     }
 
     //圆弧半径
-    protected int defaultRaisedRadius() {
+    int defaultRaisedRadius() {
         return (int) getResources().getDimension(R.dimen.program_block_fish_background_raised_radius);
     }
 
-    protected int defaultSmoothRadius() {
+    int defaultSmoothRadius() {
         return (int) getResources().getDimension(R.dimen.program_block_fish_background_smooth_radius);
     }
 }

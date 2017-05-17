@@ -15,6 +15,7 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/8.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFishLightView extends ProgramView implements ProgramLightInterface{
     private Spinner mLightSpinner;
     private EditText mTimeEditText;
@@ -52,8 +53,8 @@ public class ProgramFishLightView extends ProgramView implements ProgramLightInt
     }
 
     private void init(Context context){
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_light, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_light, this);
+//        addView(view);
 
         mProgramViewBackground = (ProgramFishBackground) view.findViewById(R.id.custom_view);
         mLightSpinner= (Spinner) view.findViewById(R.id.light_spinner);

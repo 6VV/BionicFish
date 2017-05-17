@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconColors">
+        <ignore path="src/main/res/drawable-mdpi/bluetooth_disabled.png" />
+        <ignore path="src/main/res/drawable-mdpi/disconnected.png" />
+        <ignore path="src/main/res/drawable-mdpi/graphic_program.png" />
+        <ignore path="src/main/res/drawable-mdpi/help.png" />
+        <ignore path="src/main/res/drawable-mdpi/layout.png" />
+        <ignore path="src/main/res/drawable-mdpi/light_color.png" />
+        <ignore path="src/main/res/drawable-mdpi/manual.png" />
+        <ignore path="src/main/res/drawable-mdpi/pattern.png" />
+        <ignore path="src/main/res/drawable-mdpi/rename.png" />
+        <ignore path="src/main/res/drawable-mdpi/search.png" />
+        <ignore path="src/main/res/drawable-mdpi/settings.png" />
+        <ignore path="src/main/res/drawable-mdpi/text_program.png" />
+        <ignore path="src/main/res/drawable/pattern.png" />
+        <ignore path="src/main/res/mipmap-mdpi/bluetooth_disabled.png" />
+        <ignore path="src/main/res/mipmap-mdpi/disconnected.png" />
+        <ignore path="src/main/res/mipmap-mdpi/help.png" />
+        <ignore path="src/main/res/mipmap-mdpi/light_color.png" />
+        <ignore path="src/main/res/mipmap-mdpi/manual.png" />
+        <ignore path="src/main/res/mipmap-mdpi/search.png" />
+        <ignore path="src/main/res/mipmap-mdpi/settings.png" />
+    </issue>
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/ink_fish1.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish10.png" />
+        <ignore path="src/main/res/drawable/ink_fish2.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish3.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish4.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish5.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish6.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish7.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish8.PNG" />
+        <ignore path="src/main/res/drawable/ink_fish9.PNG" />
+        <ignore path="src/main/res/drawable/yellow_fish1.png" />
+        <ignore path="src/main/res/drawable/yellow_fish2.png" />
+        <ignore path="src/main/res/drawable/yellow_fish3.png" />
+        <ignore path="src/main/res/drawable/yellow_fish4.png" />
+        <ignore path="src/main/res/drawable/yellow_fish5.png" />
+        <ignore path="src/main/res/drawable/yellow_fish6.png" />
+        <ignore path="src/main/res/drawable/yellow_fish7.png" />
+        <ignore path="src/main/res/drawable/yellow_fish8.png" />
+    </issue>
+</lint>

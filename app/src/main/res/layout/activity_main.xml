@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity.MainActivity">
+    android:layout_height="match_parent">
 
     <Button
         android:id="@+id/viewLocation"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="100dp"
+        android:layout_marginStart="100dp"
         android:scaleType="fitCenter"
         android:visibility="invisible"/>
 
@@ -19,65 +19,69 @@
         android:id="@+id/btnFishUp"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="85dp"
         android:layout_above="@+id/viewLocation"
+        android:layout_marginStart="85dp"
+        android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/fish_up"
-        android:background="@android:color/transparent"/>
+        tools:ignore="ContentDescription"/>
 
     <ImageButton
         android:id="@+id/btnFishLeft"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/viewLocation"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/fish_left"
-        android:background="@android:color/transparent"/>
+        tools:ignore="ContentDescription"/>
 
     <com.lyyjy.yfyb.bionicfish.Speed.SpeedView
         android:id="@+id/viewFishSpeed"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginRight="50dp"
-        android:scaleType="fitCenter"
+        android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/fish_speed" />
+        android:layout_marginEnd="50dp"
+        android:background="@drawable/fish_speed"
+        android:scaleType="fitCenter"/>
 
     <ImageButton
         android:id="@+id/btnFishAccelerate"
         android:layout_width="80dp"
         android:layout_height="62dp"
-        android:layout_marginRight="50dp"
         android:layout_above="@+id/viewFishSpeed"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="50dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
-        android:src="@drawable/fish_accelerate" />
+        android:src="@drawable/fish_accelerate"
+        tools:ignore="ContentDescription"/>
 
     <ImageButton
+        android:id="@+id/btnFishDecelerate"
         android:layout_width="80dp"
         android:layout_height="62dp"
-        android:layout_marginRight="50dp"
+        android:layout_alignParentEnd="true"
         android:layout_below="@+id/viewFishSpeed"
-        android:layout_alignParentRight="true"
+        android:layout_marginEnd="50dp"
         android:background="@android:color/transparent"
         android:scaleType="centerInside"
         android:src="@drawable/fish_decelerate"
-        android:id="@+id/btnFishDecelerate"/>
+        tools:ignore="ContentDescription"/>
 
     <ImageButton
         android:id="@+id/btnFishRight"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="130dp"
+        android:layout_below="@+id/btnFishUp"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/btnFishLeft"
+        android:background="@android:color/transparent"
         android:scaleType="fitCenter"
         android:src="@drawable/fish_right"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/btnFishUp"
-        android:layout_toEndOf="@+id/btnFishLeft"
-        android:layout_marginStart="11dp"/>
-
+        tools:ignore="ContentDescription"/>
 </RelativeLayout>
+

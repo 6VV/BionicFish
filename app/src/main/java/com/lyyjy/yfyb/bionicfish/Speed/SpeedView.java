@@ -6,21 +6,29 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Handler;
+import android.os.Message;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.lang.ref.WeakReference;
 
 /**
  * Created by Administrator on 2016/4/6.
  */
+@SuppressWarnings({"DefaultFileTemplate", "FieldCanBeLocal"})
 public class SpeedView extends View {
+
+    private static final String TAG=SpeedView.class.getSimpleName();
+
     private Paint mWavePaint;
     private Paint mTextPaint;
 
-    private int mWaveColor=Color.RED;
-    private int mTextColor = Color.WHITE;
+    private final int mWaveColor=Color.RED;
+    private final int mTextColor = Color.WHITE;
 
     private Handler mHandler;
     private boolean mStartWave = false;
@@ -29,13 +37,15 @@ public class SpeedView extends View {
     private float mAmplitude = 5.0F; // 振幅
     private final float mAngleInterval = 0.033F;
 
-    private int mAlpha = 150;// 透明度
+    private final int mAlpha = 150;// 透明度
 
     private float mTargetWaterLevel = 0.5F;// 水高(0~1)
     private float mCurrentWaterLevel=mTargetWaterLevel;
 
-    private final int REFRESH_TIME=60;  //刷新间隔
-    private float mWaterLevelIncrement=1f*REFRESH_TIME/SpeedManager.PRESS_MIN_TIME_TO_CHANGE/SpeedManager.SPEED_MAX_DIF;   //增量
+    private static final int REFRESH_TIME=60;  //刷新间隔
+    private final float mWaterLevelIncrement=1f*REFRESH_TIME/SpeedManager.PRESS_MIN_TIME_TO_CHANGE/SpeedManager.SPEED_MAX_DIF;   //增量
+
+    private final RectF mOval=new RectF();
 
     public SpeedView(Context context) {
         super(context);
@@ -64,21 +74,33 @@ public class SpeedView extends View {
         mWavePaint.setColor(mWaveColor);
         mWavePaint.setAlpha(mAlpha);
 
-        mHandler = new Handler() {
-            @Override
-            public void handleMessage(android.os.Message msg) {
-                if (msg.what == 0) {
-                    invalidate();
-                    if (mStartWave) {
-                        // 不断发消息给自己，使自己不断被重绘
-                        mHandler.sendEmptyMessageDelayed(0, REFRESH_TIME);
-                    }
-                }
-            }
-        };
+        mHandler = new MyHandler(this);
     }
 
+    private static class MyHandler extends Handler{
+
+        private final WeakReference<SpeedView> mSpeedViewWeakReference;
+
+        public MyHandler(SpeedView speedView){
+            mSpeedViewWeakReference=new WeakReference<>(speedView);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            SpeedView speedView=mSpeedViewWeakReference.get();
+            if (msg.what == 0) {
+                speedView.invalidate();
+                if (speedView.mStartWave) {
+                    // 不断发消息给自己，使自己不断被重绘
+                    sendEmptyMessageDelayed(0, SpeedView.REFRESH_TIME);
+                }
+            }
+        }
+    }
+
+
     public void setWaterLevel(float waterLevel){
+        Log.d(TAG, "setWaterLevel: ");
         mTargetWaterLevel =waterLevel;
     }
 
@@ -94,36 +116,38 @@ public class SpeedView extends View {
         //计算当前油量线和水平中线的距离
         float centerOffset = Math.abs(width * mCurrentWaterLevel - width / 2);
         //计算油量线和与水平中线的角度
-        float horiAngle = (float)(Math.asin(centerOffset / (width / 2)) * 180 / Math.PI);
+        float horizonAngle = (float)(Math.asin(centerOffset / (width / 2)) * 180 / Math.PI);
         //扇形的起始角度和扫过角度
         float startAngle, sweepAngle;
         if (mCurrentWaterLevel > 0.5F) {
-            startAngle = 360F - horiAngle;
-            sweepAngle = 180F + 2 * horiAngle;
+            startAngle = 360F - horizonAngle;
+            sweepAngle = 180F + 2 * horizonAngle;
         } else {
-            startAngle = horiAngle;
-            sweepAngle = 180F - 2 * horiAngle;
+            startAngle = horizonAngle;
+            sweepAngle = 180F - 2 * horizonAngle;
         }
 
-        int persent= (int) (mCurrentWaterLevel *100);
-        String textPersent=String.valueOf(persent)+"%";
-        float left = mTextPaint.measureText(textPersent);
+        int percent= (int) (mCurrentWaterLevel *100);
+        String textPercent=String.valueOf(percent)+"%";
+        float left = mTextPaint.measureText(textPercent);
         Paint.FontMetrics fm=mTextPaint.getFontMetrics();
         int fontHeight=(int)Math.ceil(-fm.descent-fm.ascent);
-        canvas.drawText(textPersent, width/2 - left / 2,
+        canvas.drawText(textPercent, width/2 - left / 2,
                 width/2+fontHeight/2, mTextPaint);
 
-        // 如果未开始（未调用startWave方法）,绘制一个扇形
+        // 绘制一个扇形
+//        RectF oval = new RectF(0, 0, width, width );
+        //noinspection SuspiciousNameCombination
+        mOval.set(0,0,width,width);
+        canvas.drawArc(mOval, startAngle, sweepAngle, false, mWavePaint);
+
+        //如果未开始（未调用startWave方法）
         if ((!mStartWave) || (width == 0) || (height == 0)) {
-            // 绘制,即水面静止时的高度
-            RectF oval = new RectF(0, 0, width, width );
-            canvas.drawArc(oval, startAngle, sweepAngle, false, mWavePaint);
+//            // 绘制,即水面静止时的高度
+//            RectF oval = new RectF(0, 0, width, width );
+//            canvas.drawArc(oval, startAngle, sweepAngle, false, mWavePaint);
             return;
         }
-
-        RectF oval = new RectF(0, 0, width, width );
-        canvas.drawArc(oval, startAngle, sweepAngle, false, mWavePaint);
-
 
         if (this.mCount >= 8388607L) {
             this.mCount = 0L;
@@ -182,6 +206,7 @@ public class SpeedView extends View {
     }
 
     public void startWave() {
+        Log.d(TAG, "startWave:start wave ");
         if (!mStartWave) {
             this.mCount = 0L;
             mStartWave = true;
@@ -224,13 +249,9 @@ public class SpeedView extends View {
         this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
 
     /**
-     * @category 保存状态
+     *  保存状态
      */
     static class SavedState extends BaseSavedState {
         int progress;

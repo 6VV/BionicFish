@@ -15,7 +15,9 @@ import android.widget.FrameLayout;
  * Created by Administrator on 2017/2/9.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class DragLayout extends FrameLayout {
+    @SuppressWarnings("unused")
     private static final String TAG = DragLayout.class.getSimpleName();
 
     private Context mContext;
@@ -49,7 +51,7 @@ public class DragLayout extends FrameLayout {
         mViewDragHelper = ViewDragHelper.create(this, 1, mCallback);
     }
 
-    private ViewDragHelper.Callback mCallback = new ViewDragHelper.Callback() {
+    private final ViewDragHelper.Callback mCallback = new ViewDragHelper.Callback() {
         @Override
         public boolean tryCaptureView(View child, int pointerId) {
             return mLayoutDisplayView.contain(child);
@@ -67,9 +69,7 @@ public class DragLayout extends FrameLayout {
             final int leftBound = getPaddingLeft();
             final int rightBound = getWidth() - child.getWidth() - leftBound;
 
-            final int newLeft = Math.min(Math.max(left, leftBound), rightBound);
-
-            return newLeft;
+            return Math.min(Math.max(left, leftBound), rightBound);
         }
 
         @Override
@@ -77,9 +77,8 @@ public class DragLayout extends FrameLayout {
             final int topBound = getPaddingTop();
 //            final int bottomBound = getHeight() - child.getHeight() - topBound;
 //            final int newTop = Math.min(Math.max(top, topBound), bottomBound);
-            final int newTop = Math.max(top, topBound);
 
-            return newTop;
+            return Math.max(top, topBound);
         }
 
         @Override
@@ -90,8 +89,8 @@ public class DragLayout extends FrameLayout {
         }
 
         @Override
-        public void onViewReleased(View releasedChild, float xvel, float yvel) {
-            super.onViewReleased(releasedChild, xvel, yvel);
+        public void onViewReleased(View releasedChild, float x, float y) {
+            super.onViewReleased(releasedChild, x, y);
 
             DragLayout.this.onViewReleased(releasedChild);
 

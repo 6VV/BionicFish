@@ -7,15 +7,17 @@ import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public abstract class AstNode {
     public abstract byte[] interpret();
 
-    protected byte getTime(Token timeToken) throws InterpreterException {
-        if (timeToken.getText()=="\n"){
+    byte getTime(Token timeToken) throws InterpreterException {
+        //noinspection StringEquality
+        if (timeToken.getText().equals("\n")){
             throw new InterpreterException(timeToken, InterpreterException.ExceptionCode.TIME_CAN_NOT_BE_NULL);
         }
 
-        int time=0;
+        int time;
         try {
             time= Integer.parseInt(timeToken.getText());
             if (time< GrammarParser.MIN_TIME || time>GrammarParser.MAX_TIME){

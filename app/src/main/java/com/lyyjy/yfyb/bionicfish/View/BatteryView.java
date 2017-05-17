@@ -5,25 +5,28 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 /**
  * Created by Administrator on 2016/5/3.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class BatteryView extends View {
-    private float mPowerUpperLimit =220f;    //电池电量上限
-    private float mPowerLowerLimit=43f;     //电池电量下限
+    private final float mPowerUpperLimit =220f;    //电池电量上限
+    private final float mPowerLowerLimit=43f;     //电池电量下限
     private float mCurrentPower = 220f;      //当前电池电量
 
-    private float mHeadBodyWidthRate =1/6f;   //电池身与电池头部比例
-    private float mHeightWidthRate =0.5f;    //电池身宽高比
+    private final float mHeadBodyWidthRate =1/6f;   //电池身与电池头部比例
+    private final float mHeightWidthRate =0.5f;    //电池身宽高比
 
     private int mBodyWidth =90;             //电池宽度
     private int mBodyHeight = (int) (mBodyWidth * mHeightWidthRate); //电池高度
     private int mHeadWidth= (int) (mBodyWidth * mHeadBodyWidthRate);  //电池头部宽度
+    @SuppressWarnings("SuspiciousNameCombination")
     private int mHeadHeight=mHeadWidth; //电池头部高度
-    private int mInsideMargin=mBodyWidth/18;        //电池内部间隔
+    private final int mInsideMargin=mBodyWidth/18;        //电池内部间隔
 
     public BatteryView(Context context) {
         super(context);
@@ -35,8 +38,14 @@ public class BatteryView extends View {
         post(new Runnable() {
             @Override
             public void run() {
-                int height=((AppCompatActivity)context).getSupportActionBar().getHeight();
-                resizeWidth(height);
+                ActionBar actionBar=((AppCompatActivity)context).getSupportActionBar();
+                if (actionBar!=null){
+                    int height=actionBar.getHeight();
+                    //noinspection SuspiciousNameCombination
+                    resizeWidth(height);
+                }else{
+                    resizeWidth(144);
+                }
             }
         });
     }
@@ -116,7 +125,7 @@ public class BatteryView extends View {
 
     private int mTopMargin=0;
     private int mLeftMargin=0;
-    public void resizeWidth(int width){
+    private void resizeWidth(int width){
         float newWidth= (float) (width*0.6);
         float newHeight=newWidth*mHeightWidthRate;
         mTopMargin= (int) ((mBodyHeight-newHeight)/2);
@@ -125,6 +134,7 @@ public class BatteryView extends View {
         mBodyWidth = (int) newWidth;
         mBodyHeight = (int) (newHeight);
         mHeadWidth= (int) (mBodyWidth * mHeadBodyWidthRate);
+        //noinspection SuspiciousNameCombination
         mHeadHeight=mHeadWidth;
         invalidate();
     }

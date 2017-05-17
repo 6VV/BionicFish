@@ -1,14 +1,14 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,17 +18,16 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.lyyjy.yfyb.bionicfish.Activity.HelpterActivity.HelpActivity;
+import com.lyyjy.yfyb.bionicfish.Activity.HelperActivity.HelpActivity;
 import com.lyyjy.yfyb.bionicfish.Background.FishBackground;
 import com.lyyjy.yfyb.bionicfish.Background.MainBackground;
 import com.lyyjy.yfyb.bionicfish.Background.WidgetBackground;
 import com.lyyjy.yfyb.bionicfish.ContextUtil;
-import com.lyyjy.yfyb.bionicfish.DataPersistence.DatabaseManager;
 import com.lyyjy.yfyb.bionicfish.Device;
 import com.lyyjy.yfyb.bionicfish.Light.LightColorManager;
+import com.lyyjy.yfyb.bionicfish.R;
 import com.lyyjy.yfyb.bionicfish.Remote.CommandManager;
 import com.lyyjy.yfyb.bionicfish.Remote.IRemoteCallback;
-import com.lyyjy.yfyb.bionicfish.R;
 import com.lyyjy.yfyb.bionicfish.Remote.RemoteFactory;
 import com.lyyjy.yfyb.bionicfish.Remote.RemoteParent;
 import com.lyyjy.yfyb.bionicfish.SettingContext;
@@ -43,10 +42,12 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
     private MenuItem mItemSensor;
     private BatteryView mBatteryView;
     private BroadcastReceiver mBroadcastReceiver=null;
+    private DrawerLayout mDrawerLayout;
+    @SuppressWarnings("FieldCanBeLocal")
+    private NavigationView mNavigationView;
 
-    private final int HANDLER_CONNECT_CHANGED=1;
-    private final int HANDLER_POWER_CHANGED=2;
-    private final int HANDLER_RESET_NAME=3;
+//    private final int HANDLER_POWER_CHANGED=2;
+//    private final int HANDLER_RESET_NAME=3;
 
 
     @Override
@@ -63,13 +64,32 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
 
         frameLayout.addView(new MainBackground(this));
 
+
         mFishBackground=new FishBackground(this);
         frameLayout.addView(mFishBackground);
 
         mWidgetBackground=new WidgetBackground(this);
         frameLayout.addView(mWidgetBackground);
 
+        getLayoutInflater().inflate(R.layout.navigation,frameLayout);
+
         setContentView(frameLayout);
+
+        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        mNavigationView= (NavigationView) findViewById(R.id.navigation_view);
+        mNavigationView.setItemIconTintList(null);
+        mNavigationView.getMenu().findItem(R.id.action_battery).setVisible(false);
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                onOptionsItemSelected(item);
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
+
+
     }
 
     @Override
@@ -99,13 +119,6 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
                 item.setActionView(mBatteryView);
             }
         });
-
-//        mBatteryView.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                item.setActionView(mBatteryView);
-//            }
-//        });
     }
 
     @Override
@@ -125,18 +138,14 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
                 updateSensorIcon();
             }break;
             case R.id.action_remote:{
-                RemoteFactory.getRemote().changeEnabled();
+                if(!RemoteFactory.getRemote().changeEnabled()){
+                    Toast.makeText(MainActivity.this,"切换失败",Toast.LENGTH_LONG).show();
+                }
             }break;
             case R.id.action_moveWidget:{
                 mWidgetBackground.showWidgetLayoutDialog();
-//                mWidgetBackground.changeBehavior();
-//                if (mWidgetBackground.getTouchBehavior()== WidgetBackground.TouchBehavior.CONTROL_FISH){
-//                    item.setTitle("拖动控件");
-//                }else{
-//                    item.setTitle("锁定控件");
-//                }
             }break;
-            case R.id.action_pragram:{
+            case R.id.action_program:{
                 startActivity(new Intent(MainActivity.this, ProgramActivity.class));
             }break;
             case R.id.action_ui_program:{
@@ -167,7 +176,7 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
     private void changeSettings() {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("设置");
-        View view= LayoutInflater.from(this).inflate(R.layout.dialog_setting,null);
+        @SuppressLint("InflateParams") View view= LayoutInflater.from(this).inflate(R.layout.dialog_setting,null);
         final Switch autoCloseWireless= (Switch) view.findViewById(R.id.autoCloseWireless);
         final Switch autoReconnect = (Switch) view.findViewById(R.id.autoConnect);
         autoCloseWireless.setChecked(SettingContext.getInstance().isAutoCloseWireless());
@@ -296,11 +305,6 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         RemoteFactory.getRemote().registerRemoteCallback(this);
@@ -318,17 +322,12 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
     @Override
     protected void onPause() {
         super.onPause();
-        RemoteFactory.getRemote().unregisterRemoteCallback(this);
+        RemoteFactory.getRemote().unregisterRemoteCallback();
         if (mBroadcastReceiver!=null){
             RemoteFactory.getRemote().unregisterEnableReceiver(this,mBroadcastReceiver);
         }
         mFishBackground.stopSwim();
         mWidgetBackground.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -340,9 +339,10 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
                 RemoteFactory.getRemote().changeEnabled();
             }
         }
+
     }
 
-    float mBackTime=0;
+    private float mBackTime=0;
     private void exit() {
         final int CLICK_INTERVAL=2000;
         if (System.currentTimeMillis() - mBackTime > CLICK_INTERVAL) {
@@ -360,16 +360,21 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
 
     @Override
     public void onConnectChanged() {
-        Message msg=new Message();
-        msg.what=HANDLER_CONNECT_CHANGED;
-        MyHandler.sendMessage(msg);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateConnectStateIcon();
+            }
+        });
     }
 
-    private void onElectricQuantityChanged(int power) {
-        Message msg=new Message();
-        msg.what=HANDLER_POWER_CHANGED;
-        msg.arg1=power;
-        MyHandler.sendMessage(msg);
+    private void onElectricQuantityChanged(final int power) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mBatteryView.setPower(power);
+            }
+        });
     }
 
     @Override
@@ -381,9 +386,28 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
                     return;
                 }
                 if (data[1]==CommandManager.BACK_RESET_NAME){
-                    Message msg=new Message();
-                    msg.what=HANDLER_RESET_NAME;
-                    MyHandler.sendMessage(msg);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            CommandManager.resetDevice();
+                            String text;
+                            if (SettingContext.getInstance().isAutoConnect()){
+                                text="重置名字成功\n正在重新连接";
+                            }else{
+                                text="重置名字成功\n请重新连接";
+                            }
+                            Toast.makeText(MainActivity.this,text,Toast.LENGTH_LONG).show();
+                        }
+                    });
+//                    Message msg=new Message();
+//                    msg.what=HANDLER_RESET_NAME;
+//                    MyHandler.sendMessage(msg);
                 }
             }break;
             case CommandManager.BACK_HEART_HIT:{
@@ -397,42 +421,11 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
         }
     }
 
-    private Handler MyHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case HANDLER_CONNECT_CHANGED:{
-                    updateConnectStateIcon();
-                }break;
-                case HANDLER_POWER_CHANGED:{
-                    mBatteryView.setPower(msg.arg1);
-                }break;
-                case HANDLER_RESET_NAME:{
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    CommandManager.resetDevice();
-                    String text;
-                    if (SettingContext.getInstance().isAutoConnect()){
-                        text="重置名字成功\n正在重新连接";
-                    }else{
-                        text="重置名字成功\n请重新连接";
-                    }
-                    Toast.makeText(MainActivity.this,text,Toast.LENGTH_LONG).show();
-                }break;
-                default:break;
-            }
-        }
-    };
-
     private void updateRemoteIcon() {
         if (RemoteFactory.getRemote().isEnabled()){
-            mItemRemote.setIcon(R.mipmap.bluetooth_enable);
+            mItemRemote.setIcon(R.drawable.bluetooth_enable);
         }else{
-            mItemRemote.setIcon(R.mipmap.bluetooth_disabled);
+            mItemRemote.setIcon(R.drawable.bluetooth_disabled);
         }
     }
 
@@ -443,9 +436,9 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
                 RemoteParent.ConnectState state=RemoteFactory.getRemote().getConnectState();
 
                 if (state== RemoteParent.ConnectState.CONNECTED){
-                    mItemConnectState.setIcon(R.mipmap.connected);
+                    mItemConnectState.setIcon(R.drawable.connected);
                 }else{
-                    mItemConnectState.setIcon(R.mipmap.disconnected);
+                    mItemConnectState.setIcon(R.drawable.disconnected);
                 }
             }
         });
@@ -453,10 +446,10 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
 
     private void updateSensorIcon() {
         if (mWidgetBackground.isSensor()){
-            mItemSensor.setIcon(R.mipmap.sensor);
+            mItemSensor.setIcon(R.drawable.sensor);
             mWidgetBackground.setVisibility(View.INVISIBLE);
         }else{
-            mItemSensor.setIcon(R.mipmap.manual);
+            mItemSensor.setIcon(R.drawable.manual);
             mWidgetBackground.setVisibility(View.VISIBLE);
         }
     }

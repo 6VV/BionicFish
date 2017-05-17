@@ -7,6 +7,7 @@ import java.util.HashMap;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class InterpreterException extends Exception{
     public enum ExceptionCode{
         WRONG_GRAMMAR,
@@ -36,8 +37,8 @@ public class InterpreterException extends Exception{
         }
     };
 
-    private Token mToken;
-    private ExceptionCode mCode;
+    private final Token mToken;
+    private final ExceptionCode mCode;
 
     public InterpreterException(Token token, ExceptionCode code){
         mToken =token;

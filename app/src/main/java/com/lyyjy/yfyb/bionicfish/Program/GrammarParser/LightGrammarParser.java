@@ -10,6 +10,7 @@ import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
 /**
  * Created by Administrator on 2016/7/13.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class LightGrammarParser extends GrammarParserAbstract {
     @Override
     public void parse(TokenParser parser) throws InterpreterException {
@@ -26,7 +27,8 @@ public class LightGrammarParser extends GrammarParserAbstract {
                     throw new InterpreterException(currentToken, InterpreterException.ExceptionCode.UNKNOWN_COMMAND);
                 }
             }
-            if (parser.getToken().getText()!="\n"){
+            //noinspection StringEquality
+            if (!parser.getToken().getText().equals("\n")){
                 throw new InterpreterException(currentToken,InterpreterException.ExceptionCode.COMMAND_LINEBREAK);
             }
         }

@@ -8,6 +8,7 @@ import java.util.HashSet;
 /**
  * Created by Administrator on 2016/6/27.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramCommand {
     public static final String COMMAND_UP = "UP";
     public static final String COMMAND_LEFT = "LEFT";
@@ -15,7 +16,7 @@ public class ProgramCommand {
     public static final String COMMAND_WAIT = "WAIT";
     public static final String COMMAND_LIGHT = "LIGHT";
 
-    public static HashMap<String, String> COMMANDS = new HashMap<String, String>() {
+    public static final HashMap<String, String> COMMANDS = new HashMap<String, String>() {
         {
             put(COMMAND_UP, "以速度%s前进%s秒\n时间单位：秒");
             put(COMMAND_LEFT, "以速度%s左转%s秒\n时间单位：秒");
@@ -25,7 +26,7 @@ public class ProgramCommand {
         }
     };
 
-    public static HashSet<String> KEYWORDS=new HashSet<String>(){
+    public static final HashSet<String> KEYWORDS=new HashSet<String>(){
         {
             addAll(LightColor.COLOR_MAP.keySet());
         }

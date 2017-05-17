@@ -3,26 +3,29 @@ package com.lyyjy.yfyb.bionicfish.View;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
-import android.widget.ImageView;
 
 import java.util.Random;
 
 /**
  * Created by Administrator on 2016/3/27.
  */
-public class FishView extends ImageView {
+@SuppressWarnings("DefaultFileTemplate")
+public class FishView extends android.support.v7.widget.AppCompatImageView {
     private final float SPEED_RATIO =getResources().getDisplayMetrics().widthPixels/1920f;
     //基础速度
     private float baseSpeed(){
         return 10* SPEED_RATIO;
     }
+    @SuppressWarnings("FieldCanBeLocal")
     private final int mSpeedUpTimes=5;           //加速倍数
     private float mSpeed= baseSpeed();       //当前速度
 
     //基础转角
+    @SuppressWarnings("SameReturnValue")
     private float baseRotation(){
         return 2;
     }
+    @SuppressWarnings("FieldCanBeLocal")
     private final int mRotationUpTimes=5;      //转角倍数
     private float mRotation=0;              //转角
 
@@ -41,7 +44,7 @@ public class FishView extends ImageView {
         Init();
     }
 
-    void Init(){
+    private void Init(){
         //获取屏幕大小
         DisplayMetrics dm = getResources().getDisplayMetrics();
         mScreenWidth = dm.widthPixels;
@@ -75,7 +78,7 @@ public class FishView extends ImageView {
             float targetRotation=(float)(90-Math.atan2(y-mTargetLocationY,mTargetLocationX-x)*180/Math.PI);
 
             //调整速度
-            getVelocity(x,y,mTargetLocationX,mTargetLocationY);
+            getVelocity(x,y);
 
             //目标位置与当前位置的角度差值（角度）
             float diffRotation=mRotation-targetRotation;
@@ -100,7 +103,8 @@ public class FishView extends ImageView {
         }
     }
 
-    private void getVelocity(float currentX,float currentY,float targetX,float targetY){
+
+    private void getVelocity(float currentX,float currentY){
         double distance=Math.sqrt(Math.pow(mTargetLocationY-currentY,2)+Math.pow(mTargetLocationX-currentX,2));
         if (distance<50){
             mSpeed=0;
@@ -161,8 +165,7 @@ public class FishView extends ImageView {
             nextY=mScreenHeight;
         }
 
-        int[] vector={nextX,nextY};
-        return vector;
+        return new int[]{nextX,nextY};
     }
 
     public void setScaleToSizeOfScreen(float scale){

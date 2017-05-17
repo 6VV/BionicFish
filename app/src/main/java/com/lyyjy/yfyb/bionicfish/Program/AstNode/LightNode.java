@@ -10,6 +10,7 @@ import com.lyyjy.yfyb.bionicfish.Remote.CommandManager;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class LightNode extends AstNode {
     private byte mColor=0;
     private byte mTime=0;
@@ -24,7 +25,8 @@ public class LightNode extends AstNode {
     }
 
     private void addColorToken(Token colorToken) throws InterpreterException {
-        if (colorToken.getText()=="\n"){
+        //noinspection StringEquality
+        if (colorToken.getText().equals("\n")){
             throw new InterpreterException(colorToken, InterpreterException.ExceptionCode.COLOR_CAN_NOT_BE_NULL);
         }
 

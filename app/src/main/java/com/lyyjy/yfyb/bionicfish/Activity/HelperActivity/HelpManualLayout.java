@@ -1,5 +1,6 @@
-package com.lyyjy.yfyb.bionicfish.Activity.HelpterActivity;
+package com.lyyjy.yfyb.bionicfish.Activity.HelperActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -17,11 +18,13 @@ import java.util.List;
  * Created by Administrator on 2016/10/17.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
+@SuppressLint("ViewConstructor")
 public class HelpManualLayout extends FrameLayout implements ViewPager.OnPageChangeListener {
-    private Context mContext;
+    private final Context mContext;
 
     private ImageView[] mDots;
-    private int[] mIds;
+    private final int[] mIds;
 
     public HelpManualLayout(Context context, int[] viewIds) {
         super(context);
@@ -31,10 +34,10 @@ public class HelpManualLayout extends FrameLayout implements ViewPager.OnPageCha
         init();
     }
 
-    void init(){
+    private void init(){
         LayoutInflater inflater=LayoutInflater.from(mContext);
 
-        addView(inflater.inflate(R.layout.activity_help,null));
+        inflater.inflate(R.layout.activity_help,this);
 
         initViews();
         initDots();
@@ -43,8 +46,8 @@ public class HelpManualLayout extends FrameLayout implements ViewPager.OnPageCha
     private void initViews(){
         List<View> views=new ArrayList<>();
 
-        for (int i=0;i<mIds.length;++i){
-            views.add(new HelpView(mContext,mIds[i]));
+        for (int id:mIds){
+            views.add(new HelpView(mContext,id));
         }
 
         HelpAdapter helpAdapter=new HelpAdapter(views);

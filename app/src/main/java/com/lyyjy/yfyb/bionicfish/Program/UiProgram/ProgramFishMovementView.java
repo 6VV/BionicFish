@@ -15,12 +15,14 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/6.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFishMovementView extends ProgramView implements ProgramMoveInterface{
+    @SuppressWarnings("unused")
     private static final String TAG = ProgramFishMovementView.class.getSimpleName();
 
-    Spinner mDirectionSpinner;
-    Spinner mSpeedSpinner;
-    EditText mTimeEditText;
+    private Spinner mDirectionSpinner;
+    private Spinner mSpeedSpinner;
+    private EditText mTimeEditText;
 
     @Override
     public ProgramView clone(Context context) {
@@ -54,9 +56,9 @@ public class ProgramFishMovementView extends ProgramView implements ProgramMoveI
         return mDirectionSpinner.getSelectedItem().toString()+" "+mSpeedSpinner.getSelectedItem().toString()+" "+mTimeEditText.getText().toString();
     }
 
-    void init(Context context) {
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_movement, null);
-        addView(view);
+    private void init(Context context) {
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_program_fish_movement, this);
+//        addView(view);
 
         mProgramViewBackground = (ProgramFishBackground) view.findViewById(R.id.custom_view);
         mDirectionSpinner= (Spinner) view.findViewById(R.id.direction_spinner);

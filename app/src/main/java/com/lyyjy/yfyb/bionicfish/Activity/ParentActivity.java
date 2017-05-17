@@ -1,5 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.Activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
@@ -9,6 +10,8 @@ import android.view.WindowManager;
 /**
  * Created by Administrator on 2016/8/3.
  */
+@SuppressWarnings("DefaultFileTemplate")
+@SuppressLint("Registered")
 public class ParentActivity extends AppCompatActivity {
 
     @Override
@@ -25,7 +28,9 @@ public class ParentActivity extends AppCompatActivity {
 
     private void initActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        if (actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
     }
 }

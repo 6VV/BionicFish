@@ -1,5 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.Background;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,15 +10,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Handler;
-import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Switch;
@@ -35,7 +34,10 @@ import java.util.Map;
 /**
  * Created by Administrator on 2016/8/4.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class WidgetBackground extends FrameLayout implements View.OnTouchListener {
+    private static final String TAG=WidgetBackground.class.getSimpleName();
+
     public enum TouchBehavior{
         MOVE_WIDGET,
         CONTROL_FISH,
@@ -52,7 +54,7 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
 
     private boolean mIsSensor=false;
     private SensorManager mSensorManager;   //重力管理器
-    private MySensorEventListener mSensorEventListener=new MySensorEventListener();
+    private final MySensorEventListener mSensorEventListener=new MySensorEventListener();
 
     public WidgetBackground(Context context) {
         super(context);
@@ -107,7 +109,8 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         updateActionbarHeight(context);
 
         LayoutInflater layoutInflater=LayoutInflater.from(context);
-        addView(layoutInflater.inflate(R.layout.activity_main, null));
+        layoutInflater.inflate(R.layout.activity_main, this);
+
         mWidgetManager=new WidgetManager(mContext);
 
         findViewById(R.id.btnFishUp).setOnTouchListener(this);
@@ -115,14 +118,14 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         findViewById(R.id.btnFishRight).setOnTouchListener(this);
 
         ImageButton btnFishAccelerate= (ImageButton) findViewById(R.id.btnFishAccelerate);
-        ImageButton btnFishDecelearte= (ImageButton) findViewById(R.id.btnFishDecelerate);
+        ImageButton btnFishDecelerate= (ImageButton) findViewById(R.id.btnFishDecelerate);
         SpeedView speedView= (SpeedView) findViewById(R.id.viewFishSpeed);
 
         btnFishAccelerate.setOnTouchListener(this);
-        btnFishDecelearte.setOnTouchListener(this);
+        btnFishDecelerate.setOnTouchListener(this);
         speedView.setOnTouchListener(this);
 
-        mSpeedManager = new SpeedManager(speedView, btnFishAccelerate, btnFishDecelearte);
+        mSpeedManager = new SpeedManager(speedView, btnFishAccelerate, btnFishDecelerate);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
@@ -131,7 +134,12 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         post(new Runnable() {
             @Override
             public void run() {
-                mActionBarHeight=((AppCompatActivity)context).getSupportActionBar().getHeight();
+                ActionBar actionBar=((AppCompatActivity)context).getSupportActionBar();
+                int height=0;
+                if (actionBar!=null){
+                    height=actionBar.getHeight();
+                }
+                mActionBarHeight=height;
             }
         });
     }
@@ -151,7 +159,7 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
 
     public void showWidgetLayoutDialog(){
         LayoutInflater inflater=LayoutInflater.from(mContext);
-        View layout= inflater.inflate(R.layout.dialog_widget_layout,null);
+        @SuppressLint("InflateParams") View layout= inflater.inflate(R.layout.dialog_widget_layout,null);
         final Switch checkView= (Switch) layout.findViewById(R.id.checkMoveWidget);
         if (mTouchBehavior==TouchBehavior.CONTROL_FISH){
             checkView.setChecked(false);
@@ -197,8 +205,8 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         private final int WIDGET_FISH_DECELERATE=5;
         private final int WIDGET_FISH_SPEED_VIEW=6;
 
-        private Context mContext;
-        private Map<Integer,View> mViewMap=new HashMap<Integer,View>(){};
+        private final Context mContext;
+        private final Map<Integer,View> mViewMap=new HashMap<Integer,View>(){};
 
         WidgetManager(Context context){
             mContext=context;
@@ -218,14 +226,14 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Map<Integer,Rect> map=new HashMap<>();
+                    @SuppressLint("UseSparseArrays") Map<Integer,Rect> map=new HashMap<>();
 
                     for (int viewId : mViewMap.keySet()) {
                         View view=mViewMap.get(viewId);
                         map.put(viewId, new Rect(view.getLeft(), view.getTop(), view.getRight(), view.getBottom()));
                     }
 
-                    DatabaseManager.getInstance().repalceWidgetLayout(map);
+                    DatabaseManager.getInstance().replaceWidgetLayout(map);
                 }
             });
             builder.setNegativeButton("取消",null);
@@ -295,9 +303,7 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
             }
             break;
             case MotionEvent.ACTION_UP: {
-//                if (PersistentDataManager.getInstance(this).mIsSaveControlerLocation) {
-//                    saveControlerLocation();
-//                }
+
             }
             break;
         }
@@ -309,17 +315,19 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         FISH_RIGHT,
     }
 
-    private MessageSender mMessageSender=new MessageSender();
+    private final MessageSender mMessageSender=new MessageSender();
+
     private void controlFish(View view,MotionEvent event){
         switch (view.getId()){
             case R.id.btnFishAccelerate: {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Log.d(TAG, "controlFish: fish accelerate");
                     mSpeedManager.fishAccelerate();
                 }
             }break;
             case R.id.btnFishDecelerate: {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    mSpeedManager.fishDeaccelerate();
+                    mSpeedManager.fishDecelerate();
                 }
             }break;
             case R.id.btnFishUp:
@@ -369,11 +377,12 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
             mThread=null;
         }
 
-        private Runnable runnableFishControl = new Runnable() {
+        private final Runnable runnableFishControl = new Runnable() {
             @Override
             public void run() {
                 while (mBeginSendMessage) {
-                    handlerFishControl.sendEmptyMessage(0);
+//                    handlerFishControl.sendEmptyMessage(0);
+                    sendData();
                     try {
                         Thread.sleep(PRESS_INTERVAL);
                     } catch (InterruptedException e) {
@@ -383,23 +392,45 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
             }
         };
 
-        private Handler handlerFishControl = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (mFishDirection){
-                    case FISH_UP:{
-                        CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_UP);
-                    }break;
-                    case FISH_LEFT:{
-                        CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_LEFT);
-                    }break;
-                    case FISH_RIGHT:{
-                        CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_RIGHT);
-                    }break;
-                    default:return;
+        private void sendData(){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    switch (mFishDirection){
+                        case FISH_UP:{
+                            CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_UP);
+                        }break;
+                        case FISH_LEFT:{
+                            CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_LEFT);
+                        }break;
+                        case FISH_RIGHT:{
+                            CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_RIGHT);
+                        }break;
+                        default:
+                    }
                 }
-            }
-        };
+            }).start();
+        }
+
+//        private  Handler handlerFishControl = new Handler() {
+//
+//            @Override
+//            public void handleMessage(Message msg) {
+//                switch (mFishDirection){
+//                    case FISH_UP:{
+//                        CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_UP);
+//                    }break;
+//                    case FISH_LEFT:{
+//                        CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_LEFT);
+//                    }break;
+//                    case FISH_RIGHT:{
+//                        CommandManager.sendSwimDirection(CommandManager.CommandCode.FISH_RIGHT);
+//                    }break;
+//                    default:return;
+//                }
+//            }
+//        };
+
     }
 
     //传感器监听器
@@ -418,7 +449,6 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
                 float x = event.values[SensorManager.DATA_X];
                 float y = event.values[SensorManager.DATA_Y];
 //                float z = event.values[SensorManager.DATA_Z];
-
                 //若手机Y轴向下
                 if (y < -START_VALUE) {
                     updateSpeed(y);
@@ -441,7 +471,7 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
 
         private void updateSpeed(float value){
             float newValue=Math.abs(value);
-            int speed=0x00;
+            int speed;
             if (newValue<START_VALUE+INTERVAL){
                 speed=0x00;
             }else if(newValue<START_VALUE+INTERVAL*2){

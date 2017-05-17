@@ -1,7 +1,6 @@
 package com.lyyjy.yfyb.bionicfish.Program.UiProgram;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -10,7 +9,6 @@ import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,11 +17,13 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/2/15.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramXmlPersistence {
+    @SuppressWarnings("unused")
     private static final String TAG = ProgramXmlPersistence.class.getSimpleName();
     private static final String ROOT_ITEM_TAG = "blocks";
 
-    private Context mContext;
+    private final Context mContext;
 
     public ProgramXmlPersistence(Context context){
         mContext=context;
@@ -43,8 +43,8 @@ public class ProgramXmlPersistence {
             return null;
         }
         ArrayList<String> fileNames=new ArrayList<>();
-        for (int i=0;i<files.length;++i){
-            String[] fileNameInfo=splitFileName(files[i].getName());
+        for (File file:files){
+            String[] fileNameInfo=splitFileName(file.getName());
             if (fileNameInfo==null){
                 continue;
             }
@@ -68,8 +68,9 @@ public class ProgramXmlPersistence {
 //        return fileName;
 //    }
 
-    public void removeFile(String fileName){
-        new File(mContext.getFilesDir().getPath()+"/"+fileName+".xml").delete();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean removeFile(String fileName){
+       return new File(mContext.getFilesDir().getPath()+"/"+fileName+".xml").delete();
     }
 
     private String[] splitFileName(String fileName){
@@ -125,8 +126,6 @@ public class ProgramXmlPersistence {
             xmlSerializer.endDocument();
 
             fileOutputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -152,12 +151,21 @@ public class ProgramXmlPersistence {
                             block = new ProgramBlock();
                             desBlocks.add(block);
                         } else if ("data".equals(tagName)) {
-                            programView.parseText(parser.nextText());
+                            if (programView!=null){
+                                programView.parseText(parser.nextText());
+                            }else{
+                                throw new NullPointerException();
+                            }
                         }else{
                             try {
                                 if (Class.forName(tagName).getSuperclass().getName().equals(ProgramView.class.getName())) {
                                     programView = (ProgramView) Class.forName(tagName).getConstructor(Context.class).newInstance(mContext);
-                                    block.add(programView);
+
+                                    if (block!=null){
+                                        block.add(programView);
+                                    }else{
+                                        throw new NullPointerException();
+                                    }
 
                                     int left= Integer.parseInt(parser.getAttributeValue(null,"left"));
                                     int top= Integer.parseInt(parser.getAttributeValue(null,"top"));
@@ -176,11 +184,7 @@ public class ProgramXmlPersistence {
             }
 
             fileInputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        }  catch (XmlPullParserException | IOException e) {
             e.printStackTrace();
         }
     }

@@ -2,22 +2,21 @@ package com.lyyjy.yfyb.bionicfish.DataPersistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.util.Log;
 
 import java.io.File;
 
 /**
  * Created by Administrator on 2016/7/8.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFileManager {
+    @SuppressWarnings("unused")
     private static final String TAG="ProgramFileManager";
 
     private static final String FIRST_PROGRAM_NAME="firstProgram";
     private static final String SECOND_PROGRAM_NAME="secondProgram";
-//    private static final String FILE_PATH="//data//data//com.lyyjy.zdhyjs.bluetoothfish//shared_prefs//";
 
-    private Context mContext;
+    private final Context mContext;
 
     public ProgramFileManager(Context context){
         mContext=context;
@@ -27,11 +26,12 @@ public class ProgramFileManager {
         SharedPreferences.Editor editor=context.getSharedPreferences(fileName,Context.MODE_PRIVATE).edit();
         editor.putString(FIRST_PROGRAM_NAME,directionText);
         editor.putString(SECOND_PROGRAM_NAME,lightText);
-        editor.commit();
+        editor.apply();
     }
 
-    public void removeFile(String fileName){
-        new File(getFilePath()+fileName+".xml").delete();
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean removeFile(String fileName){
+       return new File(getFilePath()+fileName+".xml").delete();
     }
 
     public String[] getFileNames(){
@@ -47,7 +47,7 @@ public class ProgramFileManager {
         return fileNames;
     }
 
-    public String getFilePath(){
+    private String getFilePath(){
         String path="//data//data//";
         path+=mContext.getPackageName();
         path+="//shared_prefs//";

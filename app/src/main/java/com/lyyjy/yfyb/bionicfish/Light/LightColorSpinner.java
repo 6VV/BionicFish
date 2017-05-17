@@ -2,7 +2,6 @@ package com.lyyjy.yfyb.bionicfish.Light;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.Spinner;
 
 import com.lyyjy.yfyb.bionicfish.R;
 
@@ -11,9 +10,10 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 2016/5/5.
  */
-public class LightColorSpinner extends Spinner {
-    public ArrayList<LightColor> mArrayList=new ArrayList<LightColor>(){};
-    private Context mContext;
+@SuppressWarnings("DefaultFileTemplate")
+public class LightColorSpinner extends android.support.v7.widget.AppCompatSpinner {
+    private final ArrayList<LightColor> mArrayList=new ArrayList<LightColor>(){};
+    private final Context mContext;
 
     public LightColorSpinner(Context context) {
         super(context);

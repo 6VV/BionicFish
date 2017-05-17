@@ -7,9 +7,10 @@ import java.util.Map;
 /**
  * Created by Administrator on 2016/8/10.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class SettingContext {
-    public final String SETTINGS_AUTO_CLOSE_WIRELESS="SettingCloseWireless";
-    public final String SETTINGS_AUTO_RECONNECT = "SettingReconnect";
+    private final String SETTINGS_AUTO_CLOSE_WIRELESS="SettingCloseWireless";
+    private final String SETTINGS_AUTO_RECONNECT = "SettingReconnect";
 
     public enum ReconnectState{
         AUTO_CONNECT,
@@ -22,7 +23,7 @@ public class SettingContext {
     }
 
     private DatabaseManager mDatabaseManager=null;
-    private Map<String,Integer> mSettingValues;
+    private final Map<String,Integer> mSettingValues;
     private static SettingContext mInstance=null;
 
     public static SettingContext getInstance(){

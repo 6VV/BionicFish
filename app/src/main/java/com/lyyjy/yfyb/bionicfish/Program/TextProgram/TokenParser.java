@@ -5,10 +5,12 @@ import java.util.Vector;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class TokenParser {
-    private Vector<Token> mTokenList=new Vector<Token>();
+    private final Vector<Token> mTokenList=new Vector<>();
     private int mCharIndex =0;
     private int mTokenIndex=0;
+    @SuppressWarnings("FieldCanBeLocal")
     private int mLineNumber=1;
 
     public TokenParser(String text) {
@@ -53,7 +55,7 @@ public class TokenParser {
     }
 
     private boolean isBlank(char c){
-        return c>=0 && c<=' ';
+        return c<=' ';
     }
 
     private boolean isBlankWithoutLR(char c){

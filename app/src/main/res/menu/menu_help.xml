@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_quick_tour"
-        android:title="快速导航"
-        app:showAsAction="always"></item>
+        android:title="@string/quick_navigation"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_operating_instruction"
-        android:title="操作说明"
-        app:showAsAction="always" />
+        android:title="@string/operating_instruction"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_safety_instruction"
-        android:title="注意事项"
-        app:showAsAction="always" />
+        android:title="@string/notes"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_product_specification"
-        android:title="参数规格"
-        app:showAsAction="always" />
+        android:title="@string/parameter_specification"
+        app:showAsAction="ifRoom" />
 </menu>

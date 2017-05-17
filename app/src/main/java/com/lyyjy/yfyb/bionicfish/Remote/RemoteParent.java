@@ -8,12 +8,13 @@ import com.lyyjy.yfyb.bionicfish.Device;
 /**
  * Created by Administrator on 2016/8/8.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public abstract class RemoteParent {
-    public enum Command{
-        FISH_UP,
-        FISH_LEFT,
-        FISH_RIGHT,
-    }
+//    public enum Command{
+//        FISH_UP,
+//        FISH_LEFT,
+//        FISH_RIGHT,
+//    }
 
     /*连接状态标志*/
     public enum ConnectState{
@@ -23,7 +24,7 @@ public abstract class RemoteParent {
     }
 
     public abstract void registerRemoteCallback(IRemoteCallback iRemoteCallback);
-    public abstract void unregisterRemoteCallback(IRemoteCallback iRemoteCallback);
+    public abstract void unregisterRemoteCallback();
 
     public abstract BroadcastReceiver registerEnableReceiver(Context context, IRemoteCallback iRemoteCallback);
     public abstract void unregisterEnableReceiver(Context context, BroadcastReceiver broadcastReceiver);
@@ -31,6 +32,8 @@ public abstract class RemoteParent {
     public abstract boolean changeEnabled();
     public abstract void connect(Device device);
     public abstract void disconnect();
+    @SuppressWarnings("unused")
+    public abstract void destroy();
 
     public abstract ConnectState getConnectState();
     public abstract Device getDeviceConnected();

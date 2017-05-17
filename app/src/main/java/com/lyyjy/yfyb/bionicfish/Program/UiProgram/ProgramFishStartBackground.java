@@ -11,7 +11,9 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/13.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFishStartBackground extends ProgramViewBackground {
+    @SuppressWarnings("unused")
     private static final String TAG= ProgramFishStartBackground.class.getSimpleName();
 
     @Override
@@ -63,5 +65,7 @@ public class ProgramFishStartBackground extends ProgramViewBackground {
                 defaultRaisedRadius());
         mSmoothRadius = (int) typedArray.getDimension(R.styleable.ProgramViewBackground_smooth_radius,
                 defaultSmoothRadius());
+
+        typedArray.recycle();
     }
 }

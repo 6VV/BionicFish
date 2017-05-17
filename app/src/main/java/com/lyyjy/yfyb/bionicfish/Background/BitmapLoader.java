@@ -7,11 +7,13 @@ import android.graphics.BitmapFactory;
 /**
  * Created by Administrator on 2016/8/3.
  */
-public class BitmapLoader {
-    private Bitmap mBitmap;
-    private int screenWidth;
-    private int screenHeight;
+@SuppressWarnings("DefaultFileTemplate")
+class BitmapLoader {
+    private final Bitmap mBitmap;
+    private final int screenWidth;
+    private final int screenHeight;
 
+    @SuppressWarnings("SameParameterValue")
     public BitmapLoader(Resources resources, int resId, int minSideLength, int maxNumOfPixels, int screenWidth, int screenHeight){
         /*获取屏幕长宽*/
         this.screenHeight=screenHeight;
@@ -25,7 +27,7 @@ public class BitmapLoader {
         return mBitmap;
     }
 
-    public Bitmap decodeSampleBitmapFromResource(Resources resources,int resId,int minSideLength,int maxNumOfPixels){
+    private Bitmap decodeSampleBitmapFromResource(Resources resources,int resId,int minSideLength,int maxNumOfPixels){
         BitmapFactory.Options options=new BitmapFactory.Options();
         options.inJustDecodeBounds=true;
         BitmapFactory.decodeResource(resources, resId, options);
@@ -62,7 +64,7 @@ public class BitmapLoader {
         return newBitmap;
     }
 
-    public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+    private static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
         int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
         int roundedSize;
         if (initialSize <= 8) {

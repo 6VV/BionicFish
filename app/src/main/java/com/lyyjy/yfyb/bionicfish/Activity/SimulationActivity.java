@@ -3,7 +3,6 @@ package com.lyyjy.yfyb.bionicfish.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PointF;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -12,6 +11,7 @@ import com.lyyjy.yfyb.bionicfish.R;
 
 public class SimulationActivity extends ParentActivity {
 
+    @SuppressWarnings("unused")
     private static final String TAG = SimulationActivity.class.getSimpleName();
 
     private static final String EXTRA_MOVEMENT_TEXT = "movement_text";
@@ -37,7 +37,11 @@ public class SimulationActivity extends ParentActivity {
         mSimulationFishWithLight.post(new Runnable() {
             @Override
             public void run() {
-                mSimulationFishWithLight.setLayoutHeight(getResources().getDisplayMetrics().heightPixels - getSupportActionBar().getHeight());
+                int actionBarHeight=0;
+                if (getSupportActionBar()!=null){
+                    actionBarHeight=getSupportActionBar().getHeight();
+                }
+                mSimulationFishWithLight.setLayoutHeight(getResources().getDisplayMetrics().heightPixels - actionBarHeight);
             }
         });
         mSimulationController = new SimulationController(getIntent().getStringExtra(EXTRA_MOVEMENT_TEXT), getIntent().getStringExtra(EXTRA_LIGHT_TEXT));
@@ -82,8 +86,8 @@ public class SimulationActivity extends ParentActivity {
     }
 
     private class SimulationController {
-        private String[] mMovementLineTexts;
-        private String[] mLightLineTexts;
+        private final String[] mMovementLineTexts;
+        private final String[] mLightLineTexts;
 
         private long mMoveTime = 0;
         private int mMovementLine = 0;

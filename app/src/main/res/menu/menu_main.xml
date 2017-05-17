@@ -4,56 +4,73 @@
     tools:context=".Activity.MainActivity">
     <item
         android:id="@+id/action_battery"
-        android:title="电量"
-        app:showAsAction="always"
+        android:title="@string/electric_quantity"
+        app:showAsAction="ifRoom"
         android:icon="@android:color/transparent"
         android:checkable="false" />
-    <item android:id="@+id/action_remote"
-        android:title="蓝牙状态"
-        app:showAsAction="always"
-          android:visible="true"
-        android:icon="@mipmap/bluetooth_disabled"></item>
-    <item android:id="@+id/action_connect"
-        android:title="连接状态"
-        app:showAsAction="always"
-        android:icon="@mipmap/disconnected"></item>
-    <item android:id="@+id/action_sensor"
-          android:title="重力感应"
-          app:showAsAction="always"
-          android:icon="@mipmap/manual"></item>
-    <item android:id="@+id/action_search"
-        android:title="查询"
-        app:showAsAction="always"
-        android:icon="@mipmap/search"></item>
-    <item android:id="@+id/action_select_light"
-        android:title="选择灯光"
-        app:showAsAction="always"
-        android:icon="@mipmap/light_color"></item>
-    <item android:id="@+id/action_moveWidget"
-        android:title="控件布局"
-        app:showAsAction="never"></item>
-    <item android:id="@+id/action_swimMode"
-        android:title="游动模式"></item>
-    <item android:id="@+id/action_changeName"
-        android:title="修改名字"></item>
-    <item android:id="@+id/action_pragram"
-        android:title="编程"
-        android:visible="true"></item>
+    <item
+        android:id="@+id/action_remote"
+        android:title="@string/bluetooth_state"
+        app:showAsAction="ifRoom"
+        android:visible="true"
+        android:icon="@drawable/bluetooth_disabled"/>
+    <item
+        android:id="@+id/action_connect"
+        android:title="@string/connect_state"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/disconnected"/>
+    <item
+        android:id="@+id/action_sensor"
+        android:title="@string/gravity_sensor"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/manual"/>
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/query"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/search"/>
+    <item
+        android:id="@+id/action_select_light"
+        android:title="@string/select_light"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/light_color"/>
+    <item
+        android:id="@+id/action_moveWidget"
+        android:title="@string/controller_layout"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/layout"/>
+    <item
+        android:id="@+id/action_swimMode"
+        android:title="@string/swim_mode"
+        android:icon="@drawable/pattern"/>
+    <item
+        android:id="@+id/action_changeName"
+        android:title="@string/modify_name"
+        android:icon="@drawable/rename"/>
+    <item
+        android:id="@+id/action_program"
+        android:title="@string/text_program"
+        android:visible="true"
+        android:icon="@drawable/text_program"/>
     <item
         android:id="@+id/action_ui_program"
-        android:title="图形化编程"
-        android:visible="true"/>
-    <item android:id="@+id/action_setting"
-        android:title="设置"
+        android:title="@string/graphic_program"
+        android:visible="true"
+        android:icon="@drawable/graphic_program"/>
+    <item
+        android:id="@+id/action_setting"
+        android:title="@string/setting"
         app:showAsAction="never"
-        android:icon="@mipmap/settings"></item>
-    <item android:id="@+id/action_help"
-        android:title="帮助"
+        android:icon="@drawable/settings"/>
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/help"
         app:showAsAction="ifRoom"
-        android:icon="@mipmap/help"
-        ></item>
-    <item android:id="@+id/action_test"
-          android:title="测试"
+        android:icon="@drawable/help"
+        />
+    <item
+        android:id="@+id/action_test"
+        android:title="@string/test"
         app:showAsAction="ifRoom"
-        android:visible="false"></item>
+        android:visible="false"/>
 </menu>

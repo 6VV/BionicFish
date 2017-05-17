@@ -15,13 +15,15 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/2/9.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class LayoutDisplayView extends ScrollView {
+    @SuppressWarnings("unused")
     private static final String TAG = LayoutDisplayView.class.getSimpleName();
 
     private Context mContext = null;
     private FrameLayout mLayout = null;
 
-    private ArrayList<ProgramBlock> mProgramBlocks = new ArrayList<>();  //程序块集合
+    private final ArrayList<ProgramBlock> mProgramBlocks = new ArrayList<>();  //程序块集合
 
     public LayoutDisplayView(Context context) {
         super(context);
@@ -107,7 +109,7 @@ public class LayoutDisplayView extends ScrollView {
         updateStartViewState();
     }
 
-    public void moveToTop(ProgramBlock originBlock, ProgramBlock desBlock) {
+    private void moveToTop(ProgramBlock originBlock, ProgramBlock desBlock) {
         Rect thisBottomArea = originBlock.getBottomConcaveArea();
         Rect desTopArea = desBlock.getTopRaisedArea();
 
@@ -264,14 +266,11 @@ public class LayoutDisplayView extends ScrollView {
 
     //判断区域是否有重叠点
     private boolean haveOverlap(Rect area1, Rect area2) {
-        if (area1.left > area2.right
+        return !(area1.left > area2.right
                 || area1.right < area2.left
                 || area1.top > area2.bottom
-                || area1.bottom < area2.top) {
-            return false;
-        }
+                || area1.bottom < area2.top);
 
-        return true;
     }
 
     private void alignBlock(ProgramBlock block, int dx, int dy) {
@@ -296,7 +295,7 @@ public class LayoutDisplayView extends ScrollView {
             nextBlock.pushHead(block);
             nextBlock.changeState(ProgramBlock.State.NORMAL);
             nextBlock.setInserting(false);
-        } else if (preBlock == null && nextBlock == null) {
+        } else {
             block.changeState(ProgramBlock.State.NORMAL);
         }
     }

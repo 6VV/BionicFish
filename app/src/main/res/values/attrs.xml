@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ProgramViewBackground">
-        <attr name="left_width" format="dimension"></attr>
-        <attr name="raised_radius" format="dimension"></attr>
-        <attr name="smooth_radius" format="dimension"></attr>
+        <attr name="left_width" format="dimension"/>
+        <attr name="raised_radius" format="dimension"/>
+        <attr name="smooth_radius" format="dimension"/>
     </declare-styleable>
 </resources>

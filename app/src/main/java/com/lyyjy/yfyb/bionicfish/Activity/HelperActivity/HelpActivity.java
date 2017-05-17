@@ -1,4 +1,4 @@
-package com.lyyjy.yfyb.bionicfish.Activity.HelpterActivity;
+package com.lyyjy.yfyb.bionicfish.Activity.HelperActivity;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,11 +9,11 @@ import com.lyyjy.yfyb.bionicfish.Activity.ParentActivity;
 import com.lyyjy.yfyb.bionicfish.R;
 
 public class HelpActivity extends ParentActivity  {
-    private int[] mQuickTour ={R.mipmap.quick_tour_1,R.mipmap.quick_tour_2};
-    private int[] mOperatorManual = {R.mipmap.operator_manual_1, R.mipmap.operator_manual_2,R.mipmap.operator_manual_3,
-            R.mipmap.operator_manual_4,R.mipmap.operator_manual_5,R.mipmap.operator_manual_6};
-    private int[] mSafetyInstruction = {R.mipmap.safety_instruction_1, R.mipmap.safety_instruction_2};
-    private int[] mProductSpecification={R.mipmap.product_specification};
+    private final int[] mQuickTour ={R.drawable.quick_tour_1,R.drawable.quick_tour_2};
+    private final int[] mOperatorManual = {R.drawable.operator_manual_1, R.drawable.operator_manual_2,R.drawable.operator_manual_3,
+            R.drawable.operator_manual_4,R.drawable.operator_manual_5,R.drawable.operator_manual_6};
+    private final int[] mSafetyInstruction = {R.drawable.safety_instruction_1, R.drawable.safety_instruction_2};
+    private final int[] mProductSpecification={R.drawable.product_specification};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

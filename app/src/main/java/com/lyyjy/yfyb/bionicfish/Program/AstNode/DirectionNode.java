@@ -10,10 +10,11 @@ import java.nio.ByteBuffer;
 /**
  * Created by Administrator on 2016/6/30.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class DirectionNode extends AstNode {
     private byte mSpeed;
     private byte mTime;
-    private String mCommandCode;
+    private final String mCommandCode;
 
     public DirectionNode(TokenParser parser) throws InterpreterException {
         Token tokenCommand=parser.getLastToken();
@@ -27,7 +28,8 @@ public class DirectionNode extends AstNode {
     }
 
     private void addSpeedToken(Token tokenSpeed) throws InterpreterException {
-        if (tokenSpeed.getText()=="\n"){
+        //noinspection StringEquality
+        if (tokenSpeed.getText().equals("\n")){
             throw new InterpreterException(tokenSpeed, InterpreterException.ExceptionCode.SPEED_CAN_NOT_BE_NULL);
         }
         try{

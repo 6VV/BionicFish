@@ -8,6 +8,9 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +18,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
+import android.support.annotation.RequiresApi;
 import android.widget.Toast;
 
 import com.lyyjy.yfyb.bionicfish.ContextUtil;
@@ -29,7 +32,9 @@ import java.util.UUID;
 /**
  * Created by Administrator on 2016/8/8.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class RemoteBluetooth extends RemoteParent {
+    @SuppressWarnings("unused")
     private final String TAG="RemoteBluetooth";
 
     /*服务及特性UUID*/
@@ -38,9 +43,13 @@ public class RemoteBluetooth extends RemoteParent {
     private static final UUID UUID_CHARACTERISTIC_READ = UUID.fromString("0000fff4-0000-1000-8000-00805f9b34fb");   //读取特性对应的UUID
 
     private ConnectState mConnectState = ConnectState.DISCONNECT;    //当前连接状态
-    private Map<String, BluetoothDevice> mDeviceSearched = new HashMap<>();
+    private final Map<String, BluetoothDevice> mDeviceSearched = new HashMap<>();
 
     private IRemoteCallback mIRemoteCallback = null;
+    private MyLeScanCallback mLeScanCallback = null;
+    private MyScanCallback mScanCallback=null;
+    private boolean mIsScanning = false;
+
 
     //蓝牙相关
     private BluetoothDevice mDeviceConnected = null;
@@ -49,7 +58,7 @@ public class RemoteBluetooth extends RemoteParent {
 
     private BluetoothGattCharacteristic mBluetoothGattCharacteristicWrite;  //写入用Characteristic
 
-    private HeartbeatListener mHeartbeatListener = new HeartbeatListener();
+    private final HeartbeatListener mHeartbeatListener = new HeartbeatListener();
 
     public RemoteBluetooth() {
         getAdapter();
@@ -61,7 +70,7 @@ public class RemoteBluetooth extends RemoteParent {
     }
 
     @Override
-    public void unregisterRemoteCallback(IRemoteCallback iRemoteCallback) {
+    public void unregisterRemoteCallback() {
         mIRemoteCallback = null;
     }
 
@@ -81,7 +90,7 @@ public class RemoteBluetooth extends RemoteParent {
     }
 
     private class BluetoothChangeReceiver extends BroadcastReceiver {
-        private IRemoteCallback mIRemoteCallback;
+        private final IRemoteCallback mIRemoteCallback;
 
         public BluetoothChangeReceiver(IRemoteCallback iRemoteCallback) {
             mIRemoteCallback = iRemoteCallback;
@@ -95,11 +104,7 @@ public class RemoteBluetooth extends RemoteParent {
 
     @Override
     public boolean isEnabled() {
-        if (isBluetoothInvalid()) {
-            return false;
-        }
-
-        return mBluetoothAdapter.isEnabled();
+        return !isBluetoothInvalid() && mBluetoothAdapter.isEnabled();
     }
 
     @Override
@@ -154,6 +159,7 @@ public class RemoteBluetooth extends RemoteParent {
         mBluetoothGatt = null;
     }
 
+    @Override
     public void destroy() {
         mBluetoothGatt.close();
         mBluetoothGatt = null;
@@ -192,15 +198,9 @@ public class RemoteBluetooth extends RemoteParent {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
-//            Log.e(TAG,"onServicesDiscovered");
-
             checkServiceAndConnect();
         }
 
-        @Override
-        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            super.onCharacteristicRead(gatt, characteristic, status);
-        }
 
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
@@ -208,10 +208,6 @@ public class RemoteBluetooth extends RemoteParent {
             onReceiveData(characteristic.getValue());
         }
 
-        @Override
-        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-            super.onReadRemoteRssi(gatt, rssi, status);
-        }
     }
 
     private void onReceiveData(byte[] data) {
@@ -240,8 +236,8 @@ public class RemoteBluetooth extends RemoteParent {
             handlerHearHitStop.removeCallbacks(runnableHearHitStop);
         }
 
-        private Handler handlerHearHitStop = new Handler();   //心跳断开时
-        private Runnable runnableHearHitStop = new Runnable() {
+        private final Handler handlerHearHitStop = new Handler();   //心跳断开时
+        private final Runnable runnableHearHitStop = new Runnable() {
             @Override
             public void run() {
                 reconnect();
@@ -302,20 +298,29 @@ public class RemoteBluetooth extends RemoteParent {
             }
 
             mDeviceSearched.clear();
-            mLeScanCallback = new MyLeScanCallback(iRemoteScan);
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
+            if (Build.VERSION.SDK_INT<21){
+                mLeScanCallback = new MyLeScanCallback(iRemoteScan);
+                //noinspection deprecation
+                mBluetoothAdapter.startLeScan(mLeScanCallback);
+            }else {
+                mScanCallback=new MyScanCallback(iRemoteScan);
+                BluetoothLeScanner scanner=mBluetoothAdapter.getBluetoothLeScanner();
+                scanner.startScan(mScanCallback);
+            }
             mIsScanning = true;
         } else {
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            if (Build.VERSION.SDK_INT<21){
+                //noinspection deprecation
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            }else{
+                mBluetoothAdapter.getBluetoothLeScanner().stopScan(mScanCallback);
+            }
             mIsScanning = false;
         }
     }
 
-    private MyLeScanCallback mLeScanCallback = null;
-    private boolean mIsScanning = false;
-
     private class MyLeScanCallback implements BluetoothAdapter.LeScanCallback {
-        private IRemoteScan mIRemoteScan;
+        private final IRemoteScan mIRemoteScan;
 
         public MyLeScanCallback(IRemoteScan iRemoteScan) {
             mIRemoteScan = iRemoteScan;
@@ -323,6 +328,28 @@ public class RemoteBluetooth extends RemoteParent {
 
         @Override
         public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord) {
+            if (mDeviceSearched.containsKey(device.getAddress())) {
+                return;
+            }
+            mDeviceSearched.put(device.getAddress(), device);
+            mIRemoteScan.onScan(new Device(device.getName(), device.getAddress()));
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private class MyScanCallback extends ScanCallback {
+        private final IRemoteScan mIRemoteScan;
+
+        public MyScanCallback(IRemoteScan iRemoteScan){
+            mIRemoteScan=iRemoteScan;
+        }
+
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            super.onScanResult(callbackType, result);
+
+            BluetoothDevice device=result.getDevice();
+
             if (mDeviceSearched.containsKey(device.getAddress())) {
                 return;
             }
@@ -354,25 +381,6 @@ public class RemoteBluetooth extends RemoteParent {
 
         if (isBluetoothInvalid()
                 || !context.getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-//            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-//            dialog.setCancelable(false);
-//            dialog.setPositiveButton("确定", null);
-////                    new DialogInterface.OnClickListener() {
-////                @Override
-////                public void onClick(DialogInterface dialog, int which) {
-////                    System.exit(0);
-////                }
-////            });
-//
-//            if (isBluetoothInvalid()) {
-//                dialog.setTitle("不支持蓝牙设备");
-//            }
-//
-//            if (!context.getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-//                dialog.setTitle("不支持蓝牙4.0");
-//            }
-//
-//            dialog.show();
 
             if (isBluetoothInvalid()) {
                 Toast.makeText(context,"不支持蓝牙设备",Toast.LENGTH_LONG).show();

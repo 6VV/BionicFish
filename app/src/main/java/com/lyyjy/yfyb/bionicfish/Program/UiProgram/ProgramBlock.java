@@ -11,7 +11,9 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/2/7.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramBlock {
+    @SuppressWarnings("unused")
     private static final String TAG = ProgramBlock.class.getSimpleName();
 
     //控件当前状态
@@ -21,7 +23,7 @@ public class ProgramBlock {
         INSERTED,  //被插入
     }
 
-    private ArrayList<ProgramView> mViews = new ArrayList<>();
+    private final ArrayList<ProgramView> mViews = new ArrayList<>();
 
     private boolean mIsInserting = false;    //正在被插入
 
@@ -86,7 +88,7 @@ public class ProgramBlock {
     public String executeText(){
         StringBuilder stringBuilder=new StringBuilder();
         for (ProgramView view:mViews){
-            stringBuilder.append(view.executeText()+"\n");
+            stringBuilder.append(view.executeText()).append("\n");
         }
 
         return stringBuilder.toString();
@@ -105,6 +107,7 @@ public class ProgramBlock {
     }
 
     public boolean contains(View view) {
+        //noinspection SuspiciousMethodCalls
         return mViews.contains(view);
     }
 

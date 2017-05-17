@@ -1,11 +1,12 @@
 package com.lyyjy.yfyb.bionicfish.Remote;
 
-import android.util.Log;
 
 /**
  * Created by Administrator on 2016/8/9.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class CommandManager {
+    @SuppressWarnings("unused")
     private static final String TAG="CommandManager";
 
     public enum CommandCode{
@@ -27,10 +28,11 @@ public class CommandManager {
     private static final byte STATUS_HEAD_4 = (byte) 0x11;
     private static final byte STATUS_FINAL = (byte) 0xFF;    //数据尾
 
-    public static final byte STATUS_FISH_UP =(byte)0x00;      //小鱼前进指令
-    public static final byte STATUS_FISH_RIGHT =(byte)0x03;   //小鱼右转指令
-    public static final byte STATUS_FISH_LEFT =(byte)0x02;    //小鱼左转指令
-    public static final byte STATUS_FISH_STOP =(byte)0x20;    //小鱼停止指令
+    private static final byte STATUS_FISH_UP =(byte)0x00;      //小鱼前进指令
+    private static final byte STATUS_FISH_RIGHT =(byte)0x03;   //小鱼右转指令
+    private static final byte STATUS_FISH_LEFT =(byte)0x02;    //小鱼左转指令
+    @SuppressWarnings("unused")
+    private static final byte STATUS_FISH_STOP =(byte)0x20;    //小鱼停止指令
 
     private static final byte STATUS_MODE_MANUAL =(byte)0x00;
     private static final byte STATUS_MODE_AUTO =(byte)0x01;
@@ -43,14 +45,15 @@ public class CommandManager {
     private static final byte REQUEST_DIRECTION_PROGRAM=(byte)0x07; //方向控制程序
     private static final byte REQUEST_LIGHT_PROGRAM=(byte)0x08; //灯光控制程序
 
-    private static byte[] COMMAND_SET_COLOR={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4, REQUEST_COLOR,0x00, STATUS_FINAL}; //设置名字
-    private static byte[] COMMAND_SET_MODE={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4,REQUEST_MODE,0x00, STATUS_FINAL};       //设置游动方式
+    private static final byte[] COMMAND_SET_COLOR={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4, REQUEST_COLOR,0x00, STATUS_FINAL}; //设置名字
+    private static final byte[] COMMAND_SET_MODE={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4,REQUEST_MODE,0x00, STATUS_FINAL};       //设置游动方式
     private static final byte[] COMMAND_RESET_DEVICE={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4, REQUEST_RESET, STATUS_FINAL};  //重置设备
-    public static final byte[] COMMAND_DERECTION_PROGRAM={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3,STATUS_HEAD_4,REQUEST_DIRECTION_PROGRAM};
+    public static final byte[] COMMAND_DIRECTION_PROGRAM ={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3,STATUS_HEAD_4,REQUEST_DIRECTION_PROGRAM};
     public static final byte[] COMMAND_LIGHT_PROGRAM={STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3,STATUS_HEAD_4,REQUEST_LIGHT_PROGRAM};
+    @SuppressWarnings("unused")
     public static final byte[] COMMAND_PROGRAM_FINAL={STATUS_FINAL,STATUS_FINAL};   //程序尾
 
-    private static byte[] FISH_COMMAND={
+    private static final byte[] FISH_COMMAND={
             STATUS_HEAD_1, STATUS_HEAD_2, STATUS_HEAD_3, STATUS_HEAD_4,
             REQUEST_CONTROL,      //控制小鱼
             0x00,                   //游动方向
@@ -104,7 +107,7 @@ public class CommandManager {
                 COMMAND_SET_MODE[5]= STATUS_MODE_AUTO;
                 RemoteFactory.getRemote().send(COMMAND_SET_MODE);
             }break;
-            default:return;
+            default:
         }
     }
 
@@ -134,9 +137,10 @@ public class CommandManager {
         bytesSetName[3] = STATUS_HEAD_4;
         bytesSetName[4] = REQUEST_SET_NAME;
         bytesSetName[5] = (byte) nameLength;
-        for (int i = 0; i < nameLength; i++) {
-            bytesSetName[6 + i] = nameBytes[i];
-        }
+        System.arraycopy(nameBytes,0,bytesSetName,6,nameLength);
+//        for (int i = 0; i < nameLength; i++) {
+//            bytesSetName[6 + i] = nameBytes[i];
+//        }
         bytesSetName[6 + nameLength] = STATUS_FINAL;
 
         return bytesSetName;

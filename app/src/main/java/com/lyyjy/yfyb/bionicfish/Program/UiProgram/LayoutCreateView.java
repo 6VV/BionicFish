@@ -16,10 +16,12 @@ import java.util.ArrayList;
  * Created by Administrator on 2017/2/9.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class LayoutCreateView extends ScrollView {
+    @SuppressWarnings("unused")
     private static final String TAG = LayoutCreateView.class.getSimpleName();
 
-    private ArrayList<ProgramView> mChildViews = new ArrayList<>();
+    private final ArrayList<ProgramView> mChildViews = new ArrayList<>();
 
     public LayoutCreateView(Context context) {
         super(context);
@@ -35,8 +37,8 @@ public class LayoutCreateView extends ScrollView {
         ProgramFishLightStartView.setAlreadyExist(false);
         ProgramFishMovementStartView.setAlreadyExist(false);
 
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_create_view, null);
-        addView(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_create_view, this);
+//        addView(view);
 
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.view_list);
         for (int i = 0; i < layout.getChildCount(); ++i) {

@@ -13,6 +13,7 @@ import com.lyyjy.yfyb.bionicfish.R;
  * Created by Administrator on 2017/2/14.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class ProgramFishWaitView extends ProgramView implements ProgramMoveInterface {
 
     private EditText mTimeEditText;
@@ -47,8 +48,8 @@ public class ProgramFishWaitView extends ProgramView implements ProgramMoveInter
     }
 
     private void init(Context context) {
-        View view= LayoutInflater.from(context).inflate(R.layout.layout_program_fish_wait,null);
-        addView(view);
+        View view= LayoutInflater.from(context).inflate(R.layout.layout_program_fish_wait,this);
+//        addView(view);
 
         mProgramViewBackground = (ProgramFishBackground) view.findViewById(R.id.custom_view);
         mProgramViewBackground.setBackgroundShader(ProgramViewBackground.SHADER_MOVEMENT);

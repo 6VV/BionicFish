@@ -5,7 +5,6 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -13,27 +12,29 @@ import android.widget.FrameLayout;
 import com.lyyjy.yfyb.bionicfish.R;
 import com.lyyjy.yfyb.bionicfish.View.FishView;
 
+import java.lang.ref.WeakReference;
 import java.util.Random;
 import java.util.Vector;
 
 /**
  * Created by Administrator on 2016/8/4.
  */
+@SuppressWarnings("DefaultFileTemplate")
 public class FishBackground extends FrameLayout {
-    private final int HANDLER_FISH_SWIM=1;
-    private final int HANDLER_INIT_STATE=2;
+    private static final int HANDLER_FISH_SWIM=1;
+    private static final int HANDLER_INIT_STATE=2;
 
-    private Vector<FishView> mFishs=new Vector<>();
-    private Vector<AnimationDrawable> mFishAnimations = new Vector<>();
-    private Context mContext;
+    private final Vector<FishView> mFishes =new Vector<>();
+    private final Vector<AnimationDrawable> mFishAnimations = new Vector<>();
+    private final Context mContext;
 
-    private boolean mIsSwiming=false;
-    private HandlerFish mHandlerFish=new HandlerFish();
+    private boolean mIsSwimming =false;
+    private final HandlerFish mHandlerFish=new HandlerFish(this);
 
     public FishBackground(Context context) {
         super(context);
         mContext=context;
-        initFishs();
+        initFishes();
     }
 
     public void beginSwim() {
@@ -41,11 +42,11 @@ public class FishBackground extends FrameLayout {
             animation.start();
         }
 
-        mIsSwiming = true;
+        mIsSwimming = true;
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (mIsSwiming) {
+                while (mIsSwimming) {
                     Message msg = new Message();
                     msg.what = HANDLER_FISH_SWIM;
                     mHandlerFish.sendMessage(msg);
@@ -60,7 +61,7 @@ public class FishBackground extends FrameLayout {
     }
 
     public void stopSwim() {
-        mIsSwiming = false;
+        mIsSwimming = false;
         for (AnimationDrawable animation : mFishAnimations) {
             animation.stop();
         }
@@ -68,18 +69,27 @@ public class FishBackground extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        for (FishView fish : mFishs) {
+        for (FishView fish : mFishes) {
             fish.setTargetLocation(event.getX(), event.getY());
         }
         return true;
     }
 
-    private class HandlerFish extends Handler{
+    private static class HandlerFish extends Handler{
+
+        private final WeakReference<FishBackground> mFishBackground;
+
+        public HandlerFish(FishBackground context){
+            mFishBackground=new WeakReference<>(context);
+        }
+
         @Override
         public void handleMessage(Message msg) {
+            FishBackground fishBackground=mFishBackground.get();
+
             switch (msg.what){
-                case HANDLER_FISH_SWIM: {
-                    for (FishView fish : mFishs) {
+                case FishBackground.HANDLER_FISH_SWIM: {
+                    for (FishView fish : fishBackground.mFishes) {
                         int[] vec = fish.getNextPosition();
                         if (vec.length<2){
                             return;
@@ -89,18 +99,18 @@ public class FishBackground extends FrameLayout {
                         fish.layout(nextX, nextY, nextX + fish.getWidth(), nextY + fish.getHeight());
                     }
                 }break;
-                case HANDLER_INIT_STATE: {
+                case FishBackground.HANDLER_INIT_STATE: {
                     //初始化小鱼状态
-                    randomFishPosition();
+                    fishBackground.randomFishPosition();
                 }
                 break;
             }
         }
     }
 
-    private void initFishs() {
+    private void initFishes() {
         //添加小鱼
-        addFishs();
+        addFishes();
         initFishSize();
         initFishPosition();
 
@@ -117,13 +127,13 @@ public class FishBackground extends FrameLayout {
         },100);
     }
 
-    private void addFishs() {
+    private void addFishes() {
         for (int i = 0; i < 2; ++i) {
             FishView ivFish = new FishView(mContext);
             ivFish.setImageResource(R.drawable.yellow_fish);
             ivFish.setScaleToSizeOfScreen(4);
             AnimationDrawable fishAnimation = (AnimationDrawable) ivFish.getDrawable();
-            mFishs.add(ivFish);
+            mFishes.add(ivFish);
             mFishAnimations.add(fishAnimation);
 
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -135,7 +145,7 @@ public class FishBackground extends FrameLayout {
             ivFish.setImageResource(R.drawable.ink_fish);
             ivFish.setScaleToSizeOfScreen(8);
             AnimationDrawable fishAnimation = (AnimationDrawable) ivFish.getDrawable();
-            mFishs.add(ivFish);
+            mFishes.add(ivFish);
             mFishAnimations.add(fishAnimation);
 
             ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -144,15 +154,15 @@ public class FishBackground extends FrameLayout {
     }
 
     private void initFishSize() {
-        if (mFishs.size()==0){
+        if (mFishes.size()==0){
             return;
         }
-        mFishs.get(0).post(new Runnable() {
+        mFishes.get(0).post(new Runnable() {
             @Override
             public void run() {
                 DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
                 int screenHeight = displayMetrics.heightPixels;
-                for (FishView fish : mFishs) {
+                for (FishView fish : mFishes) {
                     float scale = (float) screenHeight / fish.getHeight() / fish.getScaleToSizeOfScreen();
                     fish.setScaleX(scale);
                     fish.setScaleY(scale);
@@ -166,7 +176,7 @@ public class FishBackground extends FrameLayout {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         int screenWidth=displayMetrics.widthPixels;
         int screenHeight = displayMetrics.heightPixels;
-        for (FishView fish :  mFishs) {
+        for (FishView fish : mFishes) {
             int x = random.nextInt(screenWidth);
             int y = random.nextInt(screenHeight);
             fish.layout(x, y, fish.getWidth() + x, fish.getHeight() + y);
