@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,7 @@ import android.widget.Toast;
 
 import com.lyyjy.yfyb.bionicfish.Device;
 import com.lyyjy.yfyb.bionicfish.DeviceAdapter;
+import com.lyyjy.yfyb.bionicfish.DeviceRecyclerViewAdapter;
 import com.lyyjy.yfyb.bionicfish.R;
 import com.lyyjy.yfyb.bionicfish.Remote.IRemoteCallback;
 import com.lyyjy.yfyb.bionicfish.Remote.IRemoteScan;
@@ -29,25 +33,34 @@ import com.lyyjy.yfyb.bionicfish.Remote.RemoteParent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends ParentActivity implements IRemoteScan, IRemoteCallback, AdapterView.OnItemClickListener {
+public class SearchActivity extends ParentActivity implements IRemoteScan, IRemoteCallback {
+
+    private static final String TAG=SearchActivity.class.getSimpleName();
+
     private MenuItem mMenuItemLoading = null;
     private MenuItem mMenuItemScanning = null;
 
     private BroadcastReceiver mBroadcastReceiver = null;
 
     private final List<Device> mDevicesInfo = new ArrayList<>();
-    private ArrayAdapter<Device> mDeviceArrayAdapter;
+//    private ArrayAdapter<Device> mDeviceArrayAdapter;
+    private DeviceRecyclerViewAdapter mDeviceArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        ListView listViewDevices = ((ListView) findViewById(R.id.lvDevices));
-        listViewDevices.setOnItemClickListener(this);
+        RecyclerView recyclerView= (RecyclerView) findViewById(R.id.device_recycler_viewer);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mDeviceArrayAdapter=new DeviceRecyclerViewAdapter(mDevicesInfo);
+        recyclerView.setAdapter(mDeviceArrayAdapter);
 
-        mDeviceArrayAdapter = new DeviceAdapter(SearchActivity.this, R.layout.adapter_device, mDevicesInfo);
-        listViewDevices.setAdapter(mDeviceArrayAdapter);
+//        ListView listViewDevices = ((ListView) findViewById(R.id.lvDevices));
+//        listViewDevices.setOnItemClickListener(this);
+//
+//        mDeviceArrayAdapter = new DeviceAdapter(SearchActivity.this, R.layout.adapter_device, mDevicesInfo);
+//        listViewDevices.setAdapter(mDeviceArrayAdapter);
     }
 
     @Override
@@ -96,8 +109,9 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
         //清空搜索记录
         if (enable) {
 //            mDevicesInfo = new ArrayList<>();
+            int length=mDevicesInfo.size();
             mDevicesInfo.clear();
-            updateDeviceList();
+            mDeviceArrayAdapter.notifyItemRangeRemoved(0,length);
         }
 
         if (!RemoteFactory.getRemote().isEnabled()) {
@@ -225,18 +239,8 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
                     String strNewName = strName.substring(2);
                     Device newDevice = new Device(strNewName, device.getAddress());
                     mDevicesInfo.add(newDevice);
-                    updateDeviceList();
+                    mDeviceArrayAdapter.notifyItemInserted(mDevicesInfo.size()-1);
                 }
-            }
-        });
-    }
-
-
-    private void updateDeviceList() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mDeviceArrayAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -260,28 +264,28 @@ public class SearchActivity extends ParentActivity implements IRemoteScan, IRemo
 
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //noinspection ConstantConditions
-        if (mDevicesInfo == null || mDevicesInfo.size() <= position) {
-            Toast.makeText(SearchActivity.this, "未找到该设备", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        final Device device = mDevicesInfo.get(position);
-        if (device == null) {
-            Toast.makeText(SearchActivity.this, "未找到该设备", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(SearchActivity.this);
-        alertDialog.setTitle("是否连接该设备");
-        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                RemoteFactory.getRemote().connect(device);
-            }
-        });
-        alertDialog.setNegativeButton("取消", null);
-        alertDialog.show();
-    }
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//        //noinspection ConstantConditions
+//        if (mDevicesInfo == null || mDevicesInfo.size() <= position) {
+//            Toast.makeText(SearchActivity.this, "未找到该设备", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        final Device device = mDevicesInfo.get(position);
+//        if (device == null) {
+//            Toast.makeText(SearchActivity.this, "未找到该设备", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        AlertDialog.Builder alertDialog = new AlertDialog.Builder(SearchActivity.this);
+//        alertDialog.setTitle("是否连接该设备");
+//        alertDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                RemoteFactory.getRemote().connect(device);
+//            }
+//        });
+//        alertDialog.setNegativeButton("取消", null);
+//        alertDialog.show();
+//    }
 }

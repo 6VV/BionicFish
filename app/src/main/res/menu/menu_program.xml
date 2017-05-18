@@ -5,22 +5,22 @@
     tools:context=".ProgramActivity">
     <item
         android:id="@+id/action_save"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         android:title="@string/save"
         tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/action_load"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         android:title="@string/load"
         tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/action_remove"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         android:title="@string/delete"
         tools:ignore="AppCompatResource"/>
     <item
         android:id="@+id/action_format"
-        app:showAsAction="never"
+        app:showAsAction="ifRoom"
         android:title="@string/format"
         tools:ignore="AppCompatResource"/>
 </menu>

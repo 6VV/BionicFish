@@ -69,24 +69,6 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         return mIsSensor;
     }
 
-//    public void setControlWidgetVisibility(int visibility){
-//        findViewById(R.id.btnFishUp).setVisibility(visibility);
-//        findViewById(R.id.btnFishLeft).setVisibility(visibility);
-//        findViewById(R.id.btnFishRight).setVisibility(visibility);
-//    }
-
-//    public TouchBehavior getTouchBehavior(){
-//        return mTouchBehavior;
-//    }
-//
-//    public void changeBehavior(){
-//        if (mTouchBehavior==TouchBehavior.MOVE_WIDGET){
-//            mTouchBehavior=TouchBehavior.CONTROL_FISH;
-//        }else{
-//            mTouchBehavior=TouchBehavior.MOVE_WIDGET;
-//        }
-//    }
-
     public void onResume(){
         mSpeedManager.startWave();
         //注册重力传感器
@@ -128,6 +110,7 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
         mSpeedManager = new SpeedManager(speedView, btnFishAccelerate, btnFishDecelerate);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+
     }
 
     private void updateActionbarHeight(final Context context) {
@@ -355,7 +338,7 @@ public class WidgetBackground extends FrameLayout implements View.OnTouchListene
                         mMessageSender.stop();
                     }break;
                 }
-            }
+            }break;
         }
     }
 
