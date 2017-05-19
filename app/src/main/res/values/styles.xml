@@ -24,5 +24,11 @@
         <item name="background">@android:color/transparent</item>
     </style>
 
+    <style name="HelpTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="TabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/tab_layout_text_size</item>
+    </style>
 
 </resources>

@@ -19,7 +19,6 @@ import android.widget.FrameLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.lyyjy.yfyb.bionicfish.Activity.HelperActivity.HelpActivity;
 import com.lyyjy.yfyb.bionicfish.Background.FishBackground;
 import com.lyyjy.yfyb.bionicfish.Background.MainBackground;
 import com.lyyjy.yfyb.bionicfish.Background.WidgetBackground;
@@ -137,7 +136,7 @@ public class MainActivity extends ParentActivity implements IRemoteCallback {
                 startActivity(new Intent(MainActivity.this, SearchActivity.class));
             }break;
             case R.id.action_help:{
-                startActivity(new Intent(MainActivity.this, HelpActivity.class));
+                startActivity(new Intent(MainActivity.this, HelpDocumentActivity.class));
             }break;
             case R.id.action_sensor:{
                 mWidgetBackground.changeSensor();

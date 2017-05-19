@@ -8,7 +8,7 @@ import android.graphics.BitmapFactory;
  * Created by Administrator on 2016/8/3.
  */
 @SuppressWarnings("DefaultFileTemplate")
-class BitmapLoader {
+public class BitmapLoader {
     private final Bitmap mBitmap;
     private final int screenWidth;
     private final int screenHeight;
