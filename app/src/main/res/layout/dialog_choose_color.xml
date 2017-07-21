@@ -10,10 +10,10 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/light_color" />
-        <com.lyyjy.yfyb.bionicfish.Light.LightColorSpinner
+        <com.lyyjy.yfyb.bionicfish.light.LightColorSpinner
             android:id="@+id/spinnerLightColor"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
-        </com.lyyjy.yfyb.bionicfish.Light.LightColorSpinner>
+        </com.lyyjy.yfyb.bionicfish.light.LightColorSpinner>
 </LinearLayout>

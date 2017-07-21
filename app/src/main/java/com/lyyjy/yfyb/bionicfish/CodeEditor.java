@@ -11,12 +11,12 @@ import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 
-import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParser;
-import com.lyyjy.yfyb.bionicfish.Program.GrammarParser.GrammarParserAbstract;
-import com.lyyjy.yfyb.bionicfish.Program.TextProgram.InterpreterException;
-import com.lyyjy.yfyb.bionicfish.Program.TextProgram.ProgramCommand;
-import com.lyyjy.yfyb.bionicfish.Program.TextProgram.Token;
-import com.lyyjy.yfyb.bionicfish.Program.TextProgram.TokenParser;
+import com.lyyjy.yfyb.bionicfish.program.grammar_parser.GrammarParser;
+import com.lyyjy.yfyb.bionicfish.program.grammar_parser.GrammarParserAbstract;
+import com.lyyjy.yfyb.bionicfish.program.text_program.InterpreterException;
+import com.lyyjy.yfyb.bionicfish.program.text_program.ProgramCommand;
+import com.lyyjy.yfyb.bionicfish.program.text_program.Token;
+import com.lyyjy.yfyb.bionicfish.program.text_program.TokenParser;
 
 
 /**

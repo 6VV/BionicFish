@@ -1,0 +1,11 @@
+package com.lyyjy.yfyb.bionicfish.remote;
+
+import com.lyyjy.yfyb.bionicfish.Device;
+
+/**
+ * Created by Administrator on 2016/8/8.
+ */
+@SuppressWarnings("DefaultFileTemplate")
+public interface IRemoteScan {
+    void onScan(final Device device);
+}

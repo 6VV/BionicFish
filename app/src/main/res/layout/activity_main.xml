@@ -38,7 +38,7 @@
         android:src="@drawable/fish_left"
         tools:ignore="ContentDescription"/>
 
-    <com.lyyjy.yfyb.bionicfish.Speed.SpeedView
+    <com.lyyjy.yfyb.bionicfish.speed.SpeedView
         android:id="@+id/viewFishSpeed"
         android:layout_width="80dp"
         android:layout_height="80dp"

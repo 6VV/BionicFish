@@ -6,6 +6,8 @@
           tools:targetApi="froyo">
 
     <!-- 用户权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -16,6 +18,7 @@
         android:required="true"
         tools:targetApi="eclair"/>
 
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -31,7 +34,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="donut">
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme"
@@ -42,33 +45,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.SearchActivity"
+            android:name=".activity.SearchActivity"
             android:label="搜索设备"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             tools:ignore="InnerclassSeparator"/>
         <activity
-            android:name=".Activity.HelperActivity.HelpActivity"
+            android:name=".activity.SearchWifiActivity"
+            android:label="搜索设备"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".activity.helper_activity.HelpActivity"
             android:label="帮助"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             tools:ignore="InnerclassSeparator"/>
         <activity
-            android:name=".Activity.ProgramActivity"
+            android:name=".activity.ProgramActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             tools:ignore="InnerclassSeparator"/>
         <activity
-            android:name=".Activity.SimulationActivity"
+            android:name=".activity.SimulationActivity"
             tools:ignore="InnerclassSeparator">
         </activity>
         <activity
-            android:name=".Activity.UiProgramActivity"
+            android:name=".activity.UiProgramActivity"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             tools:ignore="InnerclassSeparator">
         </activity>
-        <activity android:name=".Activity.HelpDocumentActivity"
+        <activity
+            android:name=".activity.HelpDocumentActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
             android:theme="@style/HelpTheme">
         </activity>
     </application>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context="com.lyyjy.yfyb.bionicfish.Activity.SearchActivity">
+    tools:context="com.lyyjy.yfyb.bionicfish.activity.SearchActivity">
 
     <!--<ListView-->
         <!--android:layout_width="match_parent"-->

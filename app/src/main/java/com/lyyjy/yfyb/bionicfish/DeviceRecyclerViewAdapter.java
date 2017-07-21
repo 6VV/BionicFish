@@ -3,16 +3,14 @@ package com.lyyjy.yfyb.bionicfish;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lyyjy.yfyb.bionicfish.Activity.SearchActivity;
-import com.lyyjy.yfyb.bionicfish.Remote.RemoteFactory;
+import com.lyyjy.yfyb.bionicfish.activity.SearchWifiActivity;
+import com.lyyjy.yfyb.bionicfish.remote.RemoteFactory;
 
 import java.util.List;
 
@@ -50,6 +48,14 @@ public class DeviceRecyclerViewAdapter extends RecyclerView.Adapter<DeviceRecycl
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         RemoteFactory.getRemote().connect(device);
+                        if (VersionControl.isWifi()){
+                            if (!WifiAp.ping(device.getAddress())){
+                                Toast.makeText(parent.getContext(),"连接失败，请选择其它设备", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                ((SearchWifiActivity)parent.getContext()).finish();
+                            }
+                        }
                     }
                 });
                 alertDialog.setNegativeButton("取消", null);

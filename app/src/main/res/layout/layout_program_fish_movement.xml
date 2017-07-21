@@ -5,7 +5,7 @@
              android:layout_margin="0dp"
              android:padding="0dp">
 
-    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.ProgramFishBackground
+    <com.lyyjy.yfyb.bionicfish.program.ui_program.ProgramFishBackground
         android:id="@+id/custom_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

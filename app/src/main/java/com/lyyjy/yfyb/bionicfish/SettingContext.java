@@ -1,6 +1,6 @@
 package com.lyyjy.yfyb.bionicfish;
 
-import com.lyyjy.yfyb.bionicfish.DataPersistence.DatabaseManager;
+import com.lyyjy.yfyb.bionicfish.dataPersistence.DatabaseManager;
 
 import java.util.Map;
 

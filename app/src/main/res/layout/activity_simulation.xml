@@ -5,9 +5,9 @@
     android:id="@+id/activity_simulation"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lyyjy.yfyb.bionicfish.Activity.SimulationActivity">
+    tools:context="com.lyyjy.yfyb.bionicfish.activity.SimulationActivity">
 
-    <com.lyyjy.yfyb.bionicfish.Program.UiProgram.SimulationFishWithLight
+    <com.lyyjy.yfyb.bionicfish.program.ui_program.SimulationFishWithLight
         android:id="@+id/simulation_fish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

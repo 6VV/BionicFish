@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:layout_marginTop="5dp"
-    tools:context="com.lyyjy.yfyb.bionicfish.Activity.ProgramActivity">
+    tools:context="com.lyyjy.yfyb.bionicfish.activity.ProgramActivity">
 
     <LinearLayout
         android:layout_width="0dp"
